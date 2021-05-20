@@ -23,12 +23,14 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         this.setupServices();
-
-        System.out.println("authService = " + authService.isAuthenticated());
     }
 
     private void setupServices() {
         authService = AuthServiceLocator.getInstance(this);
+    }
+
+    public AuthService getAuthService() {
+        return this.authService;
     }
 
     public void showLogin() {

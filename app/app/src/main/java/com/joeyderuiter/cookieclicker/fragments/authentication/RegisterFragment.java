@@ -11,8 +11,11 @@ import androidx.fragment.app.Fragment;
 
 import com.joeyderuiter.cookieclicker.MainActivity;
 import com.joeyderuiter.cookieclicker.R;
+import com.joeyderuiter.cookieclicker.services.AuthService;
 
 public class RegisterFragment extends Fragment {
+
+    AuthService authService;
 
     public RegisterFragment() {}
 
@@ -28,6 +31,8 @@ public class RegisterFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_register, container, false);
         this.setupViewElements(view);
 
+        this.authService = ((MainActivity) getActivity()).getAuthService();
+
         return view;
     }
 
@@ -37,7 +42,6 @@ public class RegisterFragment extends Fragment {
 
         Button registerButton = view.findViewById(R.id.authentication_register_register_btn);
         registerButton.setOnClickListener(x -> this.onClickRegisterButton());
-
     }
 
     private void onClickLogin() {
@@ -45,6 +49,7 @@ public class RegisterFragment extends Fragment {
     }
 
     private void onClickRegisterButton() {
+
     }
 
 }
