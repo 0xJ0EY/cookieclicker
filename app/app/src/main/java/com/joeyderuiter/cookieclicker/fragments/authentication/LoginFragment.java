@@ -27,8 +27,8 @@ public class LoginFragment extends Fragment {
 
         View view = inflater.inflate(R.layout.fragment_login, container, false);
 
-        Button switchButton = (Button) view.findViewById(R.id.switch_to_register);
-        switchButton.setOnClickListener(x -> switchToRegisterFragment());
+//        Button switchButton = (Button) view.findViewById(R.id.switch_to_register);
+//        switchButton.setOnClickListener(x -> switchToRegisterFragment());
 
         return view;
     }
