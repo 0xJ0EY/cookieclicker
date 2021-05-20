@@ -19,4 +19,8 @@ public class AuthService {
     public boolean isAuthenticated() {
         return this.auth.getCurrentUser() != null;
     }
+
+    public boolean loginByEmail(String email, String password) {
+        return false;
+    }
 }
