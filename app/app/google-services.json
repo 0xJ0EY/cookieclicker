@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "480138677166",
+    "project_id": "osrscookieclicker",
+    "storage_bucket": "osrscookieclicker.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:480138677166:android:3ce7d85789c5582369563f",
+        "android_client_info": {
+          "package_name": "com.joeyderuiter.cookieclicker"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "480138677166-uhoctao2s2v2nc81ueacfmp2vbbidjgg.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyApewFpkwhQ98pFLp8rKPT4Zc50BJTZvjI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "480138677166-uhoctao2s2v2nc81ueacfmp2vbbidjgg.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
