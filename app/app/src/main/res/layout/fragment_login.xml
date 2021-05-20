@@ -22,12 +22,20 @@
             app:layout_constraintTop_toTopOf="parent" >
 
             <TextView
+                android:id="@+id/textView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:text="Login"
+                android:textSize="24sp" />
+
+            <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="Email" />
 
             <EditText
-                android:id="@+id/editTextTextPersonName"
+                android:id="@+id/authentication_login_username"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:ems="10"
@@ -43,7 +51,7 @@
                 android:text="Password" />
 
             <EditText
-                android:id="@+id/editTextTextPassword"
+                android:id="@+id/authentication_login_password"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:ems="10"
@@ -54,7 +62,7 @@
                 android:layout_height="10dp" />
 
             <Button
-                android:id="@+id/button"
+                android:id="@+id/authentication_login_login_btn"
                 style="@style/Widget.AppCompat.Button"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -65,7 +73,7 @@
                 android:layout_height="5dp" />
 
             <Button
-                android:id="@+id/button2"
+                android:id="@+id/authentication_login_register_btn"
                 style="@style/Widget.AppCompat.Button"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"

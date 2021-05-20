@@ -26,14 +26,24 @@ public class LoginFragment extends Fragment {
                              Bundle savedInstanceState) {
 
         View view = inflater.inflate(R.layout.fragment_login, container, false);
-
-//        Button switchButton = (Button) view.findViewById(R.id.switch_to_register);
-//        switchButton.setOnClickListener(x -> switchToRegisterFragment());
+        this.setupViewElements(view);
 
         return view;
     }
 
-    private void switchToRegisterFragment() {
+    private void setupViewElements(View view) {
+        Button loginButton = view.findViewById(R.id.authentication_login_login_btn);
+        loginButton.setOnClickListener(x -> this.onClickLogin());
+
+        Button registerButton = view.findViewById(R.id.authentication_login_register_btn);
+        registerButton.setOnClickListener(x -> this.onClickRegisterButton());
+    }
+
+    private void onClickLogin() {
+
+    }
+
+    private void onClickRegisterButton() {
         ((MainActivity) requireActivity()).showRegister();
     }
 }
