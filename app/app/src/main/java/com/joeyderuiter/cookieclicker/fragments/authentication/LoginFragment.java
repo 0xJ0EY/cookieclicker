@@ -16,6 +16,8 @@ import com.joeyderuiter.cookieclicker.MainActivity;
 import com.joeyderuiter.cookieclicker.R;
 import com.joeyderuiter.cookieclicker.services.AuthService;
 
+import java.util.Objects;
+
 public class LoginFragment extends Fragment {
 
     private AuthService authService;
@@ -40,7 +42,7 @@ public class LoginFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_login, container, false);
         this.setupViewElements(view);
 
-        this.authService = ((MainActivity) getActivity()).getAuthService();
+        this.authService = ((MainActivity) requireActivity()).getAuthService();
 
         return view;
     }
@@ -82,9 +84,7 @@ public class LoginFragment extends Fragment {
 
                     System.out.println("WE IN BOYS");
                 } else {
-                    Exception exception = task.getException();
-
-                    System.out.println("WE OUT BOYS");
+                    showAccountNotFoundWarning();
                 }
             });
     }
@@ -115,6 +115,11 @@ public class LoginFragment extends Fragment {
         passwordFieldLayout.setError(null);
 
         return true;
+    }
+
+    private void showAccountNotFoundWarning() {
+        passwordFieldLayout.setErrorEnabled(true);
+        passwordFieldLayout.setError("Account not found");
     }
 
     private void onClickRegisterButton() {

@@ -43,7 +43,10 @@
                     android:id="@+id/authentication_login_email"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="E-mail" />
+                    android:hint="E-mail"
+                    android:lines="1"
+                    android:maxLines="1"
+                    android:singleLine="true" />
             </com.google.android.material.textfield.TextInputLayout>
 
             <Space
@@ -60,7 +63,9 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:hint="Password"
-                    android:password="true" />
+                    android:lines="1"
+                    android:password="true"
+                    android:singleLine="true" />
             </com.google.android.material.textfield.TextInputLayout>
 
             <Space
