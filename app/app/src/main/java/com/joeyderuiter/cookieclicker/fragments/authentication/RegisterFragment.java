@@ -72,9 +72,9 @@ public class RegisterFragment extends Fragment {
     }
 
     private void onClickRegisterButton() {
-        String username = emailField.getText().toString();
-        String email = emailField.getText().toString();
-        String password = emailField.getText().toString();
+        String username = usernameField.getText().toString();
+        String email    = emailField.getText().toString();
+        String password = passwordField.getText().toString();
 
         boolean hasError = false;
 
@@ -99,8 +99,6 @@ public class RegisterFragment extends Fragment {
                 String uid = result.getResult().getUser().getUid();
                 Profile profile = new Profile(username);
 
-                System.out.println("uid = " + uid);
-
                 this.createUserProfile(uid, profile);
             }
         });
@@ -112,22 +110,10 @@ public class RegisterFragment extends Fragment {
 
         Task<Void> test = this.authService.createUserProfile(uid, profile);
 
-        System.out.println("test.isSuccessful() = " + test.isSuccessful());
-        System.out.println("test.isComplete() = " + test.isComplete());
-        System.out.println("test.isCanceled() = " + test.isCanceled());
-        
-        System.out.println("test = " + test);
-                
-                
         test.addOnCompleteListener(result -> {
-
-            System.out.println("result = " + result);
-
             if (result.isSuccessful()) {
-                System.out.println("result = " + result);
+                ((MainActivity) requireActivity()).switchToLobbyActivity();
             }
-        }).addOnFailureListener(failure -> {
-            System.out.println("failure = " + failure);
         });
     }
 

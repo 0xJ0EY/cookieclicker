@@ -78,9 +78,7 @@ public class LoginFragment extends Fragment {
             .loginByEmail(email, password)
             .addOnCompleteListener(task -> {
                 if (task.isSuccessful()) {
-                    AuthResult result = task.getResult();
-
-                    System.out.println("WE IN BOYS");
+                    ((MainActivity) requireActivity()).switchToLobbyActivity();
                 } else {
                     showAccountNotFoundWarning();
                 }

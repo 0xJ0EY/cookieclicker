@@ -41,9 +41,6 @@ public class AuthService {
     }
 
     public Task<Void> createUserProfile(@NonNull String uid, @NonNull Profile profile) {
-
-        System.out.println("profile = " + profile);
-
         return this.database.child(uid).setValue(profile);
     }
 

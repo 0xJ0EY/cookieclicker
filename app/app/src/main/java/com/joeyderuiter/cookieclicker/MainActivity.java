@@ -4,6 +4,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 
+import android.content.Intent;
 import android.os.Bundle;
 
 import com.google.firebase.database.DatabaseReference;
@@ -25,10 +26,17 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         this.setupServices();
+        this.loginCheck();
     }
 
     private void setupServices() {
         authService = AuthServiceLocator.getInstance(this);
+    }
+
+    private void loginCheck() {
+        if (this.authService.isAuthenticated()) {
+            switchToLobbyActivity();
+        }
     }
 
     public AuthService getAuthService() {
@@ -53,6 +61,11 @@ public class MainActivity extends AppCompatActivity {
         transaction.addToBackStack(null);
 
         transaction.commit();
+    }
+
+    public void switchToLobbyActivity() {
+        Intent intent = new Intent(this, LobbyActivity.class);
+        startActivity(intent);
     }
 
 }
