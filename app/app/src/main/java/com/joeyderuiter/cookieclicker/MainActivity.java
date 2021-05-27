@@ -6,6 +6,8 @@ import androidx.fragment.app.FragmentTransaction;
 
 import android.os.Bundle;
 
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 import com.joeyderuiter.cookieclicker.fragments.authentication.LoginFragment;
 import com.joeyderuiter.cookieclicker.fragments.authentication.RegisterFragment;
 import com.joeyderuiter.cookieclicker.services.AuthService;

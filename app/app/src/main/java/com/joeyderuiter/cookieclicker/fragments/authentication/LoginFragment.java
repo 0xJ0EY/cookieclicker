@@ -16,13 +16,11 @@ import com.joeyderuiter.cookieclicker.MainActivity;
 import com.joeyderuiter.cookieclicker.R;
 import com.joeyderuiter.cookieclicker.services.AuthService;
 
-import java.util.Objects;
-
 public class LoginFragment extends Fragment {
 
     private AuthService authService;
 
-    private TextInputLayout usernameFieldLayout;
+    private TextInputLayout emailFieldLayout;
     private EditText emailField;
 
     private TextInputLayout passwordFieldLayout;
@@ -54,7 +52,7 @@ public class LoginFragment extends Fragment {
         Button registerButton = view.findViewById(R.id.authentication_login_register_btn);
         registerButton.setOnClickListener(x -> this.onClickRegisterButton());
 
-        usernameFieldLayout = view.findViewById(R.id.authentication_login_email_layout);
+        emailFieldLayout = view.findViewById(R.id.authentication_login_email_layout);
         emailField = view.findViewById(R.id.authentication_login_email);
 
         passwordFieldLayout = view.findViewById(R.id.authentication_login_password_layout);
@@ -91,14 +89,15 @@ public class LoginFragment extends Fragment {
 
     private boolean validateEmail(String username) {
         if (username.length() == 0) {
-            usernameFieldLayout.setErrorEnabled(true);
-            usernameFieldLayout.setError("Please your email");
+            emailFieldLayout.setErrorEnabled(true);
+            emailFieldLayout.setError("Please enter your email");
 
             return false;
         }
 
-        usernameFieldLayout.setErrorEnabled(false);
-        usernameFieldLayout.setError(null);
+
+        emailFieldLayout.setErrorEnabled(false);
+        emailFieldLayout.setError(null);
 
         return true;
     }
@@ -106,7 +105,7 @@ public class LoginFragment extends Fragment {
     private boolean validatePassword(String password) {
         if (password.length() == 0) {
             passwordFieldLayout.setErrorEnabled(true);
-            passwordFieldLayout.setError("Please your password");
+            passwordFieldLayout.setError("Please enter your password");
 
             return false;
         }

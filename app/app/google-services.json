@@ -1,6 +1,7 @@
 {
   "project_info": {
     "project_number": "480138677166",
+    "firebase_url": "https://osrscookieclicker-default-rtdb.europe-west1.firebasedatabase.app",
     "project_id": "osrscookieclicker",
     "storage_bucket": "osrscookieclicker.appspot.com"
   },
