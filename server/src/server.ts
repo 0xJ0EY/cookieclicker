@@ -4,6 +4,8 @@ import express from 'express';
 import http from 'http';
 import ws from 'ws';
 import { URL } from "url";
+import AuthenticationService from "./services/authentication";
+import { Player } from "./models/player";
 
 enum ServerStatus {
     STARTED,
@@ -11,21 +13,27 @@ enum ServerStatus {
 }
 
 export default class Server {
-    status: ServerStatus;
-    config: ServerConfig;
+    private status: ServerStatus;
+    private config: ServerConfig;
 
-    clients: Map<string, ws>;
+    private players: Map<string, Player>;
+    private clients: Map<string, ws>;
 
-    httpServer: http.Server;
-    wsServer: ws.Server;
+    private httpServer: http.Server;
+    private wsServer: ws.Server;
+
+    private authenticationService: AuthenticationService;
     
     constructor(config: ServerConfig) {
         this.status = ServerStatus.STOPPED;
         this.config = config;
+        this.players = new Map();
         this.clients = new Map();
 
         this.httpServer = this.setupHttpServer();
         this.wsServer   = this.setupWebsocketServer();
+
+        this.authenticationService = new AuthenticationService();
     }
 
     private setupHttpServer(): http.Server {
@@ -46,21 +54,25 @@ export default class Server {
         this.httpServer.on('upgrade', (req, socket, head) => {
             const url = new URL('http://127.0.0.1/' + req.url);
 
-            // For production use a token based system, instead of thrusting the client to send the correct user ID 
-            if (!url.searchParams.has('id')) {
-                socket.write('HTTP/1.1 401 Unauthorized\r\n\r\n');
-                socket.destroy();
-                return;
-            }
-
             userId = url.searchParams.get('id') as string;
-            
-            // Create a connected client with the user id
-            // Upgrade the connection
 
-            wss.handleUpgrade(req, socket, head, (ws) => {
-                wss.emit('connection', ws, req);
-            });
+            // Create a connected client with the user id
+            this.authenticationService
+                .getPlayer(userId)
+                .then(player => {
+                    if (player == null) {
+                        socket.write('HTTP/1.1 401 Unauthorized\r\n\r\n');
+                        socket.destroy();
+                        return;
+                    }
+
+                    this.players.set(userId, player);
+
+                    // Upgrade the connection
+                    wss.handleUpgrade(req, socket, head, (ws) => {
+                        wss.emit('connection', ws, req);
+                    });
+                });
         });
         
         wss.on('connection', (ws, request) => {
@@ -68,12 +80,12 @@ export default class Server {
             this.clients.set(userId, ws);
 
             ws.on('message', (msg) => {
-                console.log(msg);
-                
+                this.onMessage(userId, msg.toString());
             });
 
             ws.on('close', () => {
                 this.clients.delete(userId);
+                this.players.delete(userId);
             });
         });
 
@@ -108,8 +120,10 @@ export default class Server {
         // console.log('tick');
     }
 
-    private onMessage(requester: string, message: string): void {
+    private onMessage(userId: string, message: string): void {
+        const player = this.players.get(userId);
 
+        console.log(`${player?.username}: ${message}`);
     }
 
     stop() {
