@@ -4,10 +4,12 @@ import Server from './server';
 
 const serverId = uuidv4(); 
 const serverIp = '127.0.0.1';
+const serverPort = '8080';
 
 const config: ServerConfig = {
     id: serverId,
     ip: serverIp,
+    port: serverPort,
 }
 
 const server = new Server(config);
