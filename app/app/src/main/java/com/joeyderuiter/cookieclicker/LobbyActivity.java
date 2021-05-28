@@ -4,6 +4,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.content.Intent;
 import android.os.Bundle;
 
 import com.joeyderuiter.cookieclicker.adapters.LobbyListAdapter;
@@ -29,9 +30,15 @@ public class LobbyActivity extends AppCompatActivity {
 
     private void setupLobbyListView() {
         RecyclerView lobbyListView = (RecyclerView) findViewById(R.id.lobbyList);
-        LobbyListAdapter adapter = new LobbyListAdapter(this.lobbyService);
+        LobbyListAdapter adapter = new LobbyListAdapter(this, this.lobbyService);
 
         lobbyListView.setAdapter(adapter);
         lobbyListView.setLayoutManager(new LinearLayoutManager(this));
+    }
+
+    public void joinLobby(String ip) {
+        Intent intent = new Intent(this, GameActivity.class);
+        intent.putExtra(GameActivity.ARGS_IP, ip);
+        startActivity(intent);
     }
 }

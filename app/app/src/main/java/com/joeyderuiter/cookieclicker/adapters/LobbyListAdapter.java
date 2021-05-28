@@ -5,6 +5,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -13,6 +14,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.ValueEventListener;
+import com.joeyderuiter.cookieclicker.LobbyActivity;
 import com.joeyderuiter.cookieclicker.R;
 import com.joeyderuiter.cookieclicker.models.lobby.Server;
 import com.joeyderuiter.cookieclicker.services.LobbyService;
@@ -25,8 +27,10 @@ import java.util.ArrayList;
 public class LobbyListAdapter extends RecyclerView.Adapter<LobbyListAdapter.ViewHolder> {
     private static final String TAG = "LobbyListAdapter";
     private final ArrayList<Server> serverList;
+    private final LobbyActivity lobbyActivity;
 
-    public LobbyListAdapter(LobbyService lobbyService) {
+    public LobbyListAdapter(LobbyActivity lobbyActivity, LobbyService lobbyService) {
+        this.lobbyActivity = lobbyActivity;
         this.serverList = new ArrayList<>();
 
         lobbyService.getLobbyList().addValueEventListener(new ValueEventListener() {
@@ -68,6 +72,10 @@ public class LobbyListAdapter extends RecyclerView.Adapter<LobbyListAdapter.View
 
         TextView textView = holder.serverName;
         textView.setText(server.ip);
+        
+        holder.joinLobbyBtn.setOnClickListener(event -> {
+            lobbyActivity.joinLobby(server.ip);
+        });
     }
 
     @Override
@@ -78,11 +86,13 @@ public class LobbyListAdapter extends RecyclerView.Adapter<LobbyListAdapter.View
     public static class ViewHolder extends RecyclerView.ViewHolder {
 
         public TextView serverName;
+        public Button joinLobbyBtn;
 
         public ViewHolder(View itemView) {
             super(itemView);
 
             serverName = (TextView) itemView.findViewById(R.id.serverName);
+            joinLobbyBtn = (Button) itemView.findViewById(R.id.joinLobbyBtn);
         }
     }
 }
