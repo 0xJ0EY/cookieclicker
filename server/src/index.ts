@@ -3,7 +3,7 @@ import { ServerConfig } from './models/server';
 import Server from './server';
 
 const serverId = uuidv4(); 
-const serverIp = process.argv[0] || '127.0.0.1';
+const serverIp = '127.0.0.1';
 
 const config: ServerConfig = {
     id: serverId,

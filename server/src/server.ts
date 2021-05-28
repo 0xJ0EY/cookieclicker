@@ -1,5 +1,5 @@
 import { ServerConfig } from "./models/server";
-import { registerServer as registerServerInLobbyList, removeServer as removeServerInLobbyList } from "./util/server";
+import { registerServer as registerServerInLobbyList, removeServer } from "./util/server";
 import WebSocket from 'ws';
 
 enum ServerStatus {
@@ -45,7 +45,7 @@ export default class Server {
         if (this.status !== ServerStatus.STARTED) return;
         console.log('Stopping the server.');
         
-        removeServerInLobbyList(this.config);
+        removeServer(this.config);
         this.status = ServerStatus.STOPPED;
     }
 }
