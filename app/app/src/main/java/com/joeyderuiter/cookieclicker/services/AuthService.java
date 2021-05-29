@@ -12,6 +12,8 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.DatabaseReference;
 import com.joeyderuiter.cookieclicker.models.user.Profile;
 
+import java.util.Objects;
+
 public class AuthService {
 
     final static String DATABASE_TABLE = "profiles";
@@ -30,6 +32,10 @@ public class AuthService {
 
     public boolean isAuthenticated() {
         return this.auth.getCurrentUser() != null;
+    }
+
+    public String getCurrentUserId() {
+        return Objects.requireNonNull(this.auth.getCurrentUser()).getUid();
     }
 
     public Task<AuthResult> loginByEmail(@NonNull String email, @NonNull String password) {

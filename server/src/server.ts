@@ -6,6 +6,8 @@ import ws from 'ws';
 import { URL } from "url";
 import AuthenticationService from "./services/authentication";
 import { Player } from "./models/player";
+import State from "./states/state";
+import LobbyState from "./states/lobby_state";
 
 enum ServerStatus {
     STARTED,
@@ -23,12 +25,15 @@ export default class Server {
     private wsServer: ws.Server;
 
     private authenticationService: AuthenticationService;
+
+    private state: State;
     
     constructor(config: ServerConfig) {
         this.status = ServerStatus.STOPPED;
         this.config = config;
         this.players = new Map();
         this.clients = new Map();
+        this.state = new LobbyState();
 
         this.httpServer = this.setupHttpServer();
         this.wsServer   = this.setupWebsocketServer();
@@ -67,6 +72,7 @@ export default class Server {
                     }
 
                     this.players.set(userId, player);
+                    this.state.onConnect(this, player);
 
                     // Upgrade the connection
                     wss.handleUpgrade(req, socket, head, (ws) => {
@@ -84,6 +90,11 @@ export default class Server {
             });
 
             ws.on('close', () => {
+                const player = this.players.get(userId);
+                if (player) {
+                    this.state.onDisconnect(this, player);
+                }
+
                 this.clients.delete(userId);
                 this.players.delete(userId);
             });
@@ -111,19 +122,20 @@ export default class Server {
     }
 
     private startWebsocketServer() {
-        this.httpServer.listen(8080, () => {
+        this.httpServer.listen(8080, '0.0.0.0', () => {
             console.log('Listening on http://localhost:8080');
         });
     }
 
     update() {
-        // console.log('tick');
+        this.state.onTick(this);
     }
 
     private onMessage(userId: string, message: string): void {
         const player = this.players.get(userId);
+        if (!player) return;
 
-        console.log(`${player?.username}: ${message}`);
+        this.state.onMessage(this, player, message);
     }
 
     stop() {
@@ -134,5 +146,15 @@ export default class Server {
         this.status = ServerStatus.STOPPED;
     }
 
+    sendToPlayer(playerId: string, message: string) {
+        const client = this.clients.get(playerId);
+        client?.send(message);
+    }
+
+    sendToAll(message: string) {
+        this.clients.forEach(client => {
+            client?.send(message);
+        });
+    }
     
 }

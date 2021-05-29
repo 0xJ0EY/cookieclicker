@@ -74,7 +74,7 @@ public class LobbyListAdapter extends RecyclerView.Adapter<LobbyListAdapter.View
         textView.setText(server.ip);
         
         holder.joinLobbyBtn.setOnClickListener(event -> {
-            lobbyActivity.joinLobby(server.ip);
+            lobbyActivity.joinLobby(server.ip + ":" + server.port);
         });
     }
 
