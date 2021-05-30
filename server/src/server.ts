@@ -19,7 +19,7 @@ export default class Server {
     private status: ServerStatus;
     private config: ServerConfig;
 
-    private players: Map<string, Player>;
+    public players: Map<string, Player>;
     private clients: Map<string, ws>;
 
     private httpServer: http.Server;
@@ -40,15 +40,6 @@ export default class Server {
         this.wsServer   = this.setupWebsocketServer();
 
         this.authenticationService = new AuthenticationService();
-
-        // Temporary test code
-        const message = encodeMessage({
-            objectType: 'LobbyVote',
-            object: { foo: true }
-        });
-        
-        const values = decodeMessage(message);
-        console.log(values);
     }
 
     private setupHttpServer(): http.Server {
@@ -81,8 +72,10 @@ export default class Server {
                         return;
                     }
 
+                    player.isLeader = this.players.size == 0;
+                    player.isReady  = false;
+
                     this.players.set(userId, player);
-                    this.state.onConnect(this, player);
 
                     // Upgrade the connection
                     wss.handleUpgrade(req, socket, head, (ws) => {
@@ -94,6 +87,11 @@ export default class Server {
         wss.on('connection', (ws, request) => {
 
             this.clients.set(userId, ws);
+
+
+            const player = this.players.get(userId) as Player;
+            this.players.set(userId, player);
+            this.state.onConnect(this, player);
 
             ws.on('message', (msg) => {
                 this.onMessage(userId, msg.toString());
@@ -156,15 +154,21 @@ export default class Server {
         this.status = ServerStatus.STOPPED;
     }
 
-    sendToPlayer(playerId: string, message: string) {
+    sendToPlayer(playerId: string, objectType: string, object: any) {
+        const message = encodeMessage({objectType, object});
+
         const client = this.clients.get(playerId);
         client?.send(message);
     }
 
-    sendToAll(message: string) {
+    sendToAll(objectType: string, object: any) {
+        const message = encodeMessage({objectType, object});
+
         this.clients.forEach(client => {
+
+            console.log(message);
+            
             client?.send(message);
         });
-    }
-    
+    }    
 }

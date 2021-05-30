@@ -1,13 +1,17 @@
 package com.joeyderuiter.cookieclicker;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.lifecycle.ViewModelProvider;
 
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 
+import com.joeyderuiter.cookieclicker.models.messages.PlayerList;
 import com.joeyderuiter.cookieclicker.services.AuthService;
 import com.joeyderuiter.cookieclicker.services.AuthServiceLocator;
+import com.joeyderuiter.cookieclicker.services.NetworkMessageService;
+import com.joeyderuiter.cookieclicker.viewmodels.GameViewModel;
 
 import org.java_websocket.client.WebSocketClient;
 import org.java_websocket.handshake.ServerHandshake;
@@ -15,15 +19,17 @@ import org.java_websocket.handshake.ServerHandshake;
 import java.net.URI;
 import java.net.URISyntaxException;
 
+import lombok.Getter;
+
 public class GameActivity extends AppCompatActivity {
 
     private static final String TAG = "GameActivity";
     public static final String ARGS_IP = "com.joeyderuiter.cookieclicker.ARGS_IP";
 
-    private String address;
     private WebSocketClient webSocket;
-
     private AuthService authService;
+
+    private GameViewModel gameViewModel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,20 +37,25 @@ public class GameActivity extends AppCompatActivity {
         setContentView(R.layout.activity_game);
 
         Intent intent = getIntent();
-        address = intent.getStringExtra(ARGS_IP);
+        String address = intent.getStringExtra(ARGS_IP);
 
         this.setupServices();
-        this.setupWebsocketClient();
+        this.setupViewModel();
+        this.setupWebSocketClient(address);
     }
 
     private void setupServices() {
         this.authService = AuthServiceLocator.getInstance(this);
     }
 
-    private void setupWebsocketClient() {
+    private void setupViewModel() {
+        gameViewModel = new ViewModelProvider(this).get(GameViewModel.class);
+    }
+
+    private void setupWebSocketClient(String address) {
 
         String userId = authService.getCurrentUserId();
-        String uri = String.format("ws://%s/?id=%s", this.address,  userId);
+        String uri = String.format("ws://%s/?id=%s", address,  userId);
 
         System.out.println("uri = " + uri);
 
@@ -57,8 +68,7 @@ public class GameActivity extends AppCompatActivity {
 
                 @Override
                 public void onMessage(String message) {
-                    System.out.println("message = " + message);
-
+                    handleWsMessages(message);
                 }
 
                 @Override
@@ -77,5 +87,16 @@ public class GameActivity extends AppCompatActivity {
         }
 
         this.webSocket.connect();
+    }
+
+    private void handleWsMessages(String message) {
+        String decodedMessage   = NetworkMessageService.decodeMessage(message);
+        Class<?> messageType    = NetworkMessageService.getMessageType(decodedMessage);
+
+        if (messageType == PlayerList.class) {
+            PlayerList playerList = (PlayerList) NetworkMessageService.getMessageData(decodedMessage, messageType);
+
+            gameViewModel.setPlayers(playerList);
+        }
     }
 }
