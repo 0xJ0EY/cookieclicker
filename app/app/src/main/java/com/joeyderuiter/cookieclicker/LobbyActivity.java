@@ -8,8 +8,10 @@ import android.content.Intent;
 import android.os.Bundle;
 
 import com.joeyderuiter.cookieclicker.adapters.LobbyListAdapter;
+import com.joeyderuiter.cookieclicker.models.user.Profile;
 import com.joeyderuiter.cookieclicker.services.LobbyService;
 import com.joeyderuiter.cookieclicker.services.LobbyServiceLocator;
+import com.joeyderuiter.cookieclicker.services.NetworkMessageService;
 
 public class LobbyActivity extends AppCompatActivity {
 
@@ -22,6 +24,20 @@ public class LobbyActivity extends AppCompatActivity {
 
         this.setupServices();
         this.setupLobbyListView();
+
+        String encodedMessage = NetworkMessageService.encodeMessage(new Profile("Joey"));
+        System.out.println("encodedMessage = " + encodedMessage);
+
+        String decodedMessage = NetworkMessageService.decodeMessage(encodedMessage);
+        Class<?> networkMessage = NetworkMessageService.getMessageType(decodedMessage);
+
+        if (networkMessage == Profile.class) {
+            Profile profile = (Profile) NetworkMessageService.getMessageData(decodedMessage, networkMessage);
+
+            System.out.println("username = " + profile.getUsername());
+        }
+
+        System.out.println("networkMessage = " + networkMessage);
     }
 
     private void setupServices() {
