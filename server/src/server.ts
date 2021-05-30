@@ -72,6 +72,9 @@ export default class Server {
                         return;
                     }
 
+                    console.log(this.players.size);
+                    
+
                     player.isLeader = this.players.size == 0;
                     player.isReady  = false;
 

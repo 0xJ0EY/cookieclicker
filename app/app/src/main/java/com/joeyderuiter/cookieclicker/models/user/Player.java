@@ -13,9 +13,9 @@ public class Player {
 
     @Getter
     @JsonProperty("isLeader")
-    private String leader;
+    private boolean leader;
 
     @Getter
     @JsonProperty("isReady")
-    private String ready;
+    private boolean ready;
 }
