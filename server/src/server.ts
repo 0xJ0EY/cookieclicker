@@ -8,6 +8,7 @@ import AuthenticationService from "./services/authentication";
 import { Player } from "./models/player";
 import State from "./states/state";
 import LobbyState from "./states/lobby_state";
+import { decodeMessage, encodeMessage } from "./util/messages";
 
 enum ServerStatus {
     STARTED,
@@ -39,6 +40,15 @@ export default class Server {
         this.wsServer   = this.setupWebsocketServer();
 
         this.authenticationService = new AuthenticationService();
+
+        // Temporary test code
+        const message = encodeMessage({
+            objectType: 'LobbyVote',
+            object: { foo: true }
+        });
+        
+        const values = decodeMessage(message);
+        console.log(values);
     }
 
     private setupHttpServer(): http.Server {
