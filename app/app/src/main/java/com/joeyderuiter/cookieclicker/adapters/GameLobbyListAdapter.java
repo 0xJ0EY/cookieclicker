@@ -6,6 +6,7 @@ import android.graphics.Paint;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -15,6 +16,8 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.joeyderuiter.cookieclicker.R;
 import com.joeyderuiter.cookieclicker.models.messages.PlayerList;
 import com.joeyderuiter.cookieclicker.models.user.Player;
+import com.joeyderuiter.cookieclicker.services.AuthService;
+import com.joeyderuiter.cookieclicker.services.AuthServiceLocator;
 import com.joeyderuiter.cookieclicker.viewmodels.GameViewModel;
 
 import lombok.Getter;
@@ -51,12 +54,11 @@ public class GameLobbyListAdapter extends RecyclerView.Adapter<GameLobbyListAdap
 
         holder.getPlayerName().setText(player.getUsername());
 
+        // Render the correct colour if the player is ready or not
         holder.getPlayerName().setTextColor(player.isReady() ?
                 Color.rgb(0, 200 ,0) :
                 Color.rgb(200, 0 ,0)
         );
-
-        System.out.println("player.isLeader() = " + player.isLeader());
 
         if (player.isLeader())
             holder.getPlayerName().setPaintFlags(holder.getPlayerName().getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);
@@ -74,8 +76,7 @@ public class GameLobbyListAdapter extends RecyclerView.Adapter<GameLobbyListAdap
     public static class ViewHolder extends RecyclerView.ViewHolder {
 
         @Getter
-        @Setter
-        private TextView playerName;
+        private final TextView playerName;
 
         public ViewHolder(View itemView) {
             super(itemView);

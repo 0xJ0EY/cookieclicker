@@ -89,6 +89,11 @@ public class GameActivity extends AppCompatActivity {
         this.webSocket.connect();
     }
 
+    public void sendWsMessage(Object message) {
+        String encodedMessage = NetworkMessageService.encodeMessage(message);
+        this.webSocket.send(encodedMessage);
+    }
+
     private void handleWsMessages(String message) {
         String decodedMessage   = NetworkMessageService.decodeMessage(message);
         Class<?> messageType    = NetworkMessageService.getMessageType(decodedMessage);

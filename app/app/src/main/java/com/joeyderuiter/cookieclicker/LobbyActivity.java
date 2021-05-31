@@ -24,20 +24,6 @@ public class LobbyActivity extends AppCompatActivity {
 
         this.setupServices();
         this.setupLobbyListView();
-
-        String encodedMessage = NetworkMessageService.encodeMessage(new Profile("Joey"));
-        System.out.println("encodedMessage = " + encodedMessage);
-
-        String decodedMessage = NetworkMessageService.decodeMessage(encodedMessage);
-        Class<?> networkMessage = NetworkMessageService.getMessageType(decodedMessage);
-
-        if (networkMessage == Profile.class) {
-            Profile profile = (Profile) NetworkMessageService.getMessageData(decodedMessage, networkMessage);
-
-            System.out.println("username = " + profile.getUsername());
-        }
-
-        System.out.println("networkMessage = " + networkMessage);
     }
 
     private void setupServices() {

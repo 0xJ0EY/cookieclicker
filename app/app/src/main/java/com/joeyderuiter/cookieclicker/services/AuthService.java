@@ -8,8 +8,10 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.FirebaseApp;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.DatabaseReference;
+import com.joeyderuiter.cookieclicker.models.user.Player;
 import com.joeyderuiter.cookieclicker.models.user.Profile;
 
 import java.util.Objects;
@@ -48,6 +50,12 @@ public class AuthService {
 
     public Task<Void> createUserProfile(@NonNull String uid, @NonNull Profile profile) {
         return this.database.child(uid).setValue(profile);
+    }
+
+    public boolean isCurrentPlayer(Player player) {
+        String playerId = Objects.requireNonNull(this.auth.getCurrentUser()).getUid();
+
+        return playerId.equals(player.getId());
     }
 
 }

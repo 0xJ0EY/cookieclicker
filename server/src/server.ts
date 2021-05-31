@@ -9,6 +9,7 @@ import { Player } from "./models/player";
 import State from "./states/state";
 import LobbyState from "./states/lobby_state";
 import { decodeMessage, encodeMessage } from "./util/messages";
+import WebSocket from "ws";
 
 enum ServerStatus {
     STARTED,
@@ -55,12 +56,12 @@ export default class Server {
     private setupWebsocketServer(): ws.Server {
         const wss = new ws.Server({ clientTracking: false, noServer: true });
 
-        let userId: string;
+        // let userId: string;
 
         this.httpServer.on('upgrade', (req, socket, head) => {
             const url = new URL('http://127.0.0.1/' + req.url);
 
-            userId = url.searchParams.get('id') as string;
+            const userId = url.searchParams.get('id') as string;
 
             // Create a connected client with the user id
             this.authenticationService
@@ -72,9 +73,7 @@ export default class Server {
                         return;
                     }
 
-                    console.log(this.players.size);
-                    
-
+                    player.id       = userId;
                     player.isLeader = this.players.size == 0;
                     player.isReady  = false;
 
@@ -82,12 +81,12 @@ export default class Server {
 
                     // Upgrade the connection
                     wss.handleUpgrade(req, socket, head, (ws) => {
-                        wss.emit('connection', ws, req);
+                        wss.emit('connection', ws, req, userId);
                     });
                 });
         });
         
-        wss.on('connection', (ws, request) => {
+        wss.on('connection', (ws: WebSocket, request: http.IncomingMessage, userId: string) => {
 
             this.clients.set(userId, ws);
 
@@ -146,7 +145,9 @@ export default class Server {
         const player = this.players.get(userId);
         if (!player) return;
 
-        this.state.onMessage(this, player, message);
+        const networkMessage = decodeMessage(message);
+
+        this.state.onMessage(this, player, networkMessage);
     }
 
     stop() {
@@ -168,9 +169,6 @@ export default class Server {
         const message = encodeMessage({objectType, object});
 
         this.clients.forEach(client => {
-
-            console.log(message);
-            
             client?.send(message);
         });
     }    
