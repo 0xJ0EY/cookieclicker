@@ -17,6 +17,7 @@ import android.widget.Button;
 import com.joeyderuiter.cookieclicker.GameActivity;
 import com.joeyderuiter.cookieclicker.R;
 import com.joeyderuiter.cookieclicker.adapters.GameLobbyListAdapter;
+import com.joeyderuiter.cookieclicker.models.messages.LobbyStartGame;
 import com.joeyderuiter.cookieclicker.models.messages.LobbyVote;
 import com.joeyderuiter.cookieclicker.models.user.Player;
 import com.joeyderuiter.cookieclicker.services.AuthService;
@@ -25,16 +26,10 @@ import com.joeyderuiter.cookieclicker.viewmodels.GameViewModel;
 
 import org.jetbrains.annotations.NotNull;
 
-import java.util.List;
-import java.util.Objects;
-
 public class GameLobby extends Fragment {
 
     private GameViewModel gameViewModel;
     private AuthService authService;
-
-    private Button startGameBtn;
-    private Button toggleReadyBtn;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -61,11 +56,11 @@ public class GameLobby extends Fragment {
 
     private void setupButtons(View view) {
         this.setupReadyBtn(view);
-        this.setupShowGameBtn(view);
+        this.setupStartGameBtn(view);
     }
 
     private void setupReadyBtn(View view) {
-        toggleReadyBtn = (Button) view.findViewById(R.id.toggleReadyBtn);
+        Button toggleReadyBtn = (Button) view.findViewById(R.id.toggleReadyBtn);
 
         toggleReadyBtn.setOnClickListener(event -> {
             toggleReadyBtn.setEnabled(false);
@@ -74,19 +69,30 @@ public class GameLobby extends Fragment {
         });
     }
 
-    private void setupShowGameBtn(View view) {
-        startGameBtn = (Button) view.findViewById(R.id.startGameBtn);
+    private void setupStartGameBtn(View view) {
+        Button startGameBtn = (Button) view.findViewById(R.id.startGameBtn);
+
+        startGameBtn.setOnClickListener(event -> {
+            ((GameActivity) requireActivity()).sendWsMessage(new LobbyStartGame());
+        });
 
         // Show the start game button only if the player is the leader.
         this.gameViewModel.getPlayers().observe(getViewLifecycleOwner(), playerList -> {
             boolean showGameButton = false;
+            int playersReady = 0;
 
             for (Player player : playerList.getPlayers()) {
                 if (player.isLeader() && this.authService.isCurrentPlayer(player)) {
                     showGameButton = true;
                 }
+
+                if (player.isReady())
+                    playersReady++;
             }
 
+            boolean enableGameButton = playerList.getPlayers().size() == playersReady;
+
+            startGameBtn.setEnabled(enableGameButton);
             startGameBtn.setVisibility(showGameButton ? View.VISIBLE : View.GONE);
         });
     }
