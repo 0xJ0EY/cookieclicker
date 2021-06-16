@@ -11,6 +11,7 @@ import LobbyState from "./states/lobby_state";
 import { decodeMessage, encodeMessage } from "./util/messages";
 import WebSocket from "ws";
 import GameState from "./states/game_state";
+import PlayerList from "./models/network/player_list";
 
 enum ServerStatus {
     STARTED,
@@ -176,5 +177,16 @@ export default class Server {
         this.clients.forEach(client => {
             client?.send(message);
         });
-    }    
+    }
+
+    sharePlayerState(): void {
+        const players: Player[] = [];
+
+        this.players.forEach(player => {
+            players.push(player);
+        });
+
+        this.sendToAll('PlayerList', { players } as PlayerList);
+    }
+
 }

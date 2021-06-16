@@ -8,6 +8,8 @@ export default class GameState implements State {
 
     constructor(server: Server) {
         this.server = server;
+
+        console.log('starting game');
     }
 
     onChange(server: Server): void {
