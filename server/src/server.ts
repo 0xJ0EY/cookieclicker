@@ -10,6 +10,7 @@ import State from "./states/state";
 import LobbyState from "./states/lobby_state";
 import { decodeMessage, encodeMessage } from "./util/messages";
 import WebSocket from "ws";
+import GameState from "./states/game_state";
 
 enum ServerStatus {
     STARTED,
@@ -35,7 +36,7 @@ export default class Server {
         this.config = config;
         this.players = new Map();
         this.clients = new Map();
-        this.state = new LobbyState();
+        this.state = new LobbyState(this);
 
         this.httpServer = this.setupHttpServer();
         this.wsServer   = this.setupWebsocketServer();
@@ -93,7 +94,7 @@ export default class Server {
 
             const player = this.players.get(userId) as Player;
             this.players.set(userId, player);
-            this.state.onConnect(this, player);
+            this.state.onConnect(player);
 
             ws.on('message', (msg) => {
                 this.onMessage(userId, msg.toString());
@@ -102,7 +103,7 @@ export default class Server {
             ws.on('close', () => {
                 const player = this.players.get(userId);
                 if (player) {
-                    this.state.onDisconnect(this, player);
+                    this.state.onDisconnect(player);
                 }
 
                 this.clients.delete(userId);
@@ -138,7 +139,7 @@ export default class Server {
     }
 
     update() {
-        this.state.onTick(this);
+        this.state.onTick();
     }
 
     private onMessage(userId: string, message: string): void {
@@ -147,7 +148,7 @@ export default class Server {
 
         const networkMessage = decodeMessage(message);
 
-        this.state.onMessage(this, player, networkMessage);
+        this.state.onMessage(player, networkMessage);
     }
 
     stop() {
@@ -156,6 +157,10 @@ export default class Server {
         
         removeServer(this.config);
         this.status = ServerStatus.STOPPED;
+    }
+
+    startGame() {
+        this.state = new GameState(this);
     }
 
     sendToPlayer(playerId: string, objectType: string, object: any) {

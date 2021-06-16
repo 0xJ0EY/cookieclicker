@@ -6,45 +6,71 @@ import State from "./state";
 
 export default class LobbyState implements State {
 
-    onConnect(server: Server, player: Player): void {
-        console.log(`Welcome ${player.username}`);
+    private server: Server;
 
-        this.sendLobbyState(server);
+    constructor(server: Server) {
+        this.server = server;
     }
 
-    onDisconnect(server: Server, player: Player): void {
+    onConnect(player: Player): void {
+        console.log(`Welcome ${player.username}`);
+
+        this.sendLobbyState();
+    }
+
+    onDisconnect(player: Player): void {
         console.log(`Goodbye ${player.username}`);
     }
 
-    onMessage(server: Server, player: Player, message: NetworkMessage): void {
+    onMessage(player: Player, message: NetworkMessage): void {
         switch (message.objectType) {
             case "LobbyVote": {
-                this.handleLobbyVote(server, player);
+                this.handleLobbyVote(player);
+            }
+            case "LobbyStartGame": {
+                this.handleLobbyStartGame();
             }
         }
 
         console.log(`${player.username}: ${message.objectType}`);
+    }
+
+    private handleLobbyVote(player: Player) {
+        player.isReady = true;
+        this.server.players.set(player.id, player);
+
+        this.sendLobbyState();
+    }
+
+    private handleLobbyStartGame() {
+        if (this.canStartGame())
+            return;
+
         
     }
 
-    private handleLobbyVote(server: Server, player: Player) {
-        player.isReady = true;
-        server.players.set(player.id, player);
+    private canStartGame(): boolean {
+        const playerCount = this.server.players.size;
+        let playersReady = 0;
 
-        this.sendLobbyState(server);
+        this.server.players.forEach(player => {
+            playersReady += player.isReady ? 1 : 0;
+        });
+
+        return playerCount === playersReady;
     }
 
-    onTick(server: Server): void {
+    onTick(): void {
     }
 
-    private sendLobbyState(server: Server): void {
+    private sendLobbyState(): void {
         const players: Player[] = [];
 
-        server.players.forEach(player => {
+        this.server.players.forEach(player => {
             players.push(player);
         });
 
-        server.sendToAll('PlayerList', { players } as PlayerList);
+        this.server.sendToAll('PlayerList', { players } as PlayerList);
     }
 
 }
