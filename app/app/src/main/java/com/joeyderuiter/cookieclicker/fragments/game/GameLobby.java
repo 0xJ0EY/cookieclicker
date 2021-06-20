@@ -82,9 +82,8 @@ public class GameLobby extends Fragment {
             int playersReady = 0;
 
             for (Player player : playerList.getPlayers()) {
-                if (player.isLeader() && this.authService.isCurrentPlayer(player)) {
+                if (player.isLeader() && this.authService.isCurrentPlayer(player))
                     showGameButton = true;
-                }
 
                 if (player.isReady())
                     playersReady++;
@@ -105,7 +104,7 @@ public class GameLobby extends Fragment {
     }
 
     @Override
-    public void onViewCreated(@NonNull @NotNull View view, @Nullable @org.jetbrains.annotations.Nullable Bundle savedInstanceState) {
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
         this.setupViewModel();

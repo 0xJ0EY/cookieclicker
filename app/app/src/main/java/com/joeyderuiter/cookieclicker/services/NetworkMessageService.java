@@ -50,8 +50,6 @@ public class NetworkMessageService {
         int index = message.indexOf(':');
         String key = message.substring(0, index);
 
-        System.out.println("key = " + key);
-
         return NetworkMessageFactory.fromString(key);
     }
 

@@ -28,6 +28,17 @@ export default class GameState implements State {
     }
 
     onTick(): void {
+        // Do actions
+        this.calculateNewPoints();
+
+        // Send the updated player state
+        this.server.sharePlayerState();
+    }
+
+    private calculateNewPoints(): void {
+        this.server.players.forEach(player => {
+            player.points += 1;
+        });
     }
 
 }

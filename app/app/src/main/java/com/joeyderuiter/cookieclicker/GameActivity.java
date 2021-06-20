@@ -1,12 +1,16 @@
 package com.joeyderuiter.cookieclicker;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.ViewModelProvider;
 
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 
+import com.joeyderuiter.cookieclicker.fragments.game.Game;
+import com.joeyderuiter.cookieclicker.models.messages.ChangeState;
 import com.joeyderuiter.cookieclicker.models.messages.PlayerList;
 import com.joeyderuiter.cookieclicker.services.AuthService;
 import com.joeyderuiter.cookieclicker.services.AuthServiceLocator;
@@ -18,8 +22,9 @@ import org.java_websocket.handshake.ServerHandshake;
 
 import java.net.URI;
 import java.net.URISyntaxException;
-
-import lombok.Getter;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.function.Consumer;
 
 public class GameActivity extends AppCompatActivity {
 
@@ -30,6 +35,8 @@ public class GameActivity extends AppCompatActivity {
     private AuthService authService;
 
     private GameViewModel gameViewModel;
+
+    private final Map<Class<?>, Consumer<String>> messageHandlers = this.setupMessageHandlers();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,6 +49,24 @@ public class GameActivity extends AppCompatActivity {
         this.setupServices();
         this.setupViewModel();
         this.setupWebSocketClient(address);
+    }
+
+    private Map<Class<?>, Consumer<String>> setupMessageHandlers() {
+        Map<Class<?>, Consumer<String>> handlers = new HashMap<>();
+
+        handlers.put(PlayerList.class, decodedMessage -> {
+            PlayerList playerList = (PlayerList) NetworkMessageService.getMessageData(decodedMessage, PlayerList.class);
+            gameViewModel.setPlayers(playerList);
+        });
+
+        handlers.put(ChangeState.class, decodedMessage -> {
+            ChangeState changeState = (ChangeState) NetworkMessageService.getMessageData(decodedMessage, ChangeState.class);
+
+            if (changeState.getNewState().equals(ChangeState.GAME_STATE))
+                showGameFragment();
+        });
+
+        return handlers;
     }
 
     private void setupServices() {
@@ -73,7 +98,7 @@ public class GameActivity extends AppCompatActivity {
 
                 @Override
                 public void onClose(int code, String reason, boolean remote) {
-
+                    // TODO: Go back to the main screen
                 }
 
                 @Override
@@ -98,10 +123,21 @@ public class GameActivity extends AppCompatActivity {
         String decodedMessage   = NetworkMessageService.decodeMessage(message);
         Class<?> messageType    = NetworkMessageService.getMessageType(decodedMessage);
 
-        if (messageType == PlayerList.class) {
-            PlayerList playerList = (PlayerList) NetworkMessageService.getMessageData(decodedMessage, messageType);
+        Consumer<String> handler = messageHandlers.get(messageType);
 
-            gameViewModel.setPlayers(playerList);
+        if (handler != null) {
+            handler.accept(decodedMessage);
         }
     }
+
+    private void showGameFragment() {
+        Fragment gameFragment = new Game();
+        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+
+        transaction.replace(R.id.fragmentContainerView, gameFragment);
+        transaction.addToBackStack(null);
+
+        transaction.commit();
+    }
+
 }

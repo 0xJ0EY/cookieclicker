@@ -12,6 +12,7 @@ import { decodeMessage, encodeMessage } from "./util/messages";
 import WebSocket from "ws";
 import GameState from "./states/game_state";
 import PlayerList from "./models/network/player_list";
+import ChangeState from "./models/network/change_state";
 
 enum ServerStatus {
     STARTED,
@@ -19,6 +20,8 @@ enum ServerStatus {
 }
 
 export default class Server {
+    public static readonly TICK_RATE = 200;
+
     private status: ServerStatus;
     private config: ServerConfig;
 
@@ -31,6 +34,7 @@ export default class Server {
     private authenticationService: AuthenticationService;
 
     private state: State;
+    private currentTick: number = 0;
     
     constructor(config: ServerConfig) {
         this.status = ServerStatus.STOPPED;
@@ -78,6 +82,8 @@ export default class Server {
                     player.id       = userId;
                     player.isLeader = this.players.size == 0;
                     player.isReady  = false;
+                    player.points   = 1337;
+                    player.structures   = [];
 
                     this.players.set(userId, player);
 
@@ -128,7 +134,7 @@ export default class Server {
         // Setup the tick rate for the game
         setInterval(() => {
             this.update();
-        }, 1000);
+        }, Server.TICK_RATE);
 
         this.status = ServerStatus.STARTED;
     }
@@ -141,6 +147,7 @@ export default class Server {
 
     update() {
         this.state.onTick();
+        this.currentTick++;
     }
 
     private onMessage(userId: string, message: string): void {
@@ -162,6 +169,8 @@ export default class Server {
 
     startGame() {
         this.state = new GameState(this);
+
+        this.sendToAll("ChangeState", new ChangeState("GameState"));
     }
 
     sendToPlayer(playerId: string, objectType: string, object: any) {
