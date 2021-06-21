@@ -79,10 +79,10 @@ export default class Server {
                         return;
                     }
 
-                    player.id       = userId;
-                    player.isLeader = this.players.size == 0;
-                    player.isReady  = false;
-                    player.points   = 1337;
+                    player.id           = userId;
+                    player.isLeader     = this.players.size == 0;
+                    player.isReady      = false;
+                    player.points       = 0;
                     player.structures   = [];
 
                     this.players.set(userId, player);

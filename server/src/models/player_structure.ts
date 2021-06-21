@@ -1,6 +1,6 @@
 import Structure from "./structure";
 
-export default interface PlayerStructure {
+export interface PlayerStructure {
     amount: number,
     structure: Structure,
 }
