@@ -1,10 +1,11 @@
-import PlayerStructure from "./player_structure";
+import { PlayerStructure } from "./player_structure";
 
 export interface Player {
     id: string,
     username: string,
     isLeader: boolean,
     isReady: boolean,
-    points: number,
+    cookies: number,
+    total_cookies: number,
     structures: PlayerStructure[],
 };

@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".models.game.tabs.StoreTab" >
+    tools:context=".fragments.game.tabs.StoreTab" >
 
 
     <ScrollView
@@ -20,7 +20,15 @@
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
+            <TextView
+                android:id="@+id/cookie_counter"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:text="0" />
+
             <com.joeyderuiter.cookieclicker.components.CookieButton
+                android:id="@+id/cookie_button"
                 android:layout_width="match_parent"
                 android:layout_height="250dp" />
         </LinearLayout>

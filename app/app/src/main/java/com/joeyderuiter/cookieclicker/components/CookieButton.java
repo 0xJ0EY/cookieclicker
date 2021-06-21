@@ -21,6 +21,7 @@ public class CookieButton extends View {
     private final static String TAG = "CookieButton";
 
     private LocalTime lastEvent = null;
+    private Runnable onClickHandler = null;
 
     private int diameter    = 0;
     private int maxWidth    = 0;
@@ -48,7 +49,11 @@ public class CookieButton extends View {
 
                 lastEvent = LocalTime.now();
 
-                return InCircle(eventX, eventY);
+                if (InCircle(eventX, eventY)) {
+                    if (this.onClickHandler != null)
+                        this.onClickHandler.run();
+                    return true;
+                }
             }
 
             return false;
@@ -98,6 +103,10 @@ public class CookieButton extends View {
         double scale = (double) clampedMillis / (double) maxTimeBetween;
 
         return baseScale + (extraScale - extraScale * scale);
+    }
+
+    public void registerHandler(Runnable runnable) {
+        this.onClickHandler = runnable;
     }
 
     private void drawCookie() {

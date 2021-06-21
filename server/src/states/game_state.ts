@@ -4,12 +4,32 @@ import { NetworkMessage } from "../util/messages";
 import State from "./state";
 
 export default class GameState implements State {
+    
+    private messageHandlers: Map<string, (player: Player, message: NetworkMessage) => void>;
     private server: Server;
 
     constructor(server: Server) {
+        this.messageHandlers = this.setupMessageHandlers();
         this.server = server;
 
         console.log('starting game');
+    }
+
+    private setupMessageHandlers(): Map<string, (player: Player, message: NetworkMessage) => void> {
+        const handlers = new Map<string, (player: Player, message: NetworkMessage) => void>();
+
+        handlers.set("CookieClick", (player, message) => {
+            this.incrementScore(player);
+        }); 
+
+        return handlers;
+    }
+
+    private incrementScore(player: Player): void {
+        const serverPlayer = this.server.players.get(player.id);
+        if (!serverPlayer) return;
+
+        serverPlayer.cookies += 1;
     }
 
     onChange(server: Server): void {
@@ -28,6 +48,12 @@ export default class GameState implements State {
     }
 
     onMessage(player: Player, message: NetworkMessage): void {
+        const messageType = message.objectType;
+        const handler = this.messageHandlers.get(messageType);
+
+        if (handler) {
+            handler(player, message);
+        }
     }
 
     onTick(): void {
@@ -40,7 +66,7 @@ export default class GameState implements State {
 
     private calculateNewPoints(): void {
         this.server.players.forEach(player => {
-            player.points += 1;
+            // player.points += 1;
         });
     }
 

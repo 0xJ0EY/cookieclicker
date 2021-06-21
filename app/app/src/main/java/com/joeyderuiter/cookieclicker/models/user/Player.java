@@ -22,7 +22,11 @@ public class Player {
     private boolean ready;
 
     @Getter
-    private int points;
+    private int cookies;
+
+    @Getter
+    @JsonProperty("total_cookies")
+    private int totalCookies;
 
     @Getter
     private List<PlayerStructure> structures;

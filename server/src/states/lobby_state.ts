@@ -39,11 +39,7 @@ export default class LobbyState implements State {
     }
 
     onMessage(player: Player, message: NetworkMessage): void {
-        console.log(`${player.username}: ${message.objectType}`);
-
         const messageType = message.objectType;
-
-        console.log(messageType);
         const handler = this.messageHandlers.get(messageType);
 
         if (handler) {

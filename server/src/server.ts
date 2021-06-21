@@ -80,7 +80,8 @@ export default class Server {
                     player.id           = userId;
                     player.isLeader     = this.players.size == 0;
                     player.isReady      = false;
-                    player.points       = 0;
+                    player.cookies      = 0;
+                    player.total_cookies    = 0;
                     player.structures   = [];
 
                     this.players.set(userId, player);
@@ -153,6 +154,8 @@ export default class Server {
         if (!player) return;
 
         const networkMessage = decodeMessage(message);
+
+        console.log(`${player.username}: ${JSON.stringify(networkMessage)}`);
 
         this.state.onMessage(player, networkMessage);
     }

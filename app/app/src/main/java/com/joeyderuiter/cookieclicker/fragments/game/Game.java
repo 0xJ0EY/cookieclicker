@@ -5,7 +5,6 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentActivity;
 import androidx.viewpager2.adapter.FragmentStateAdapter;
 import androidx.viewpager2.widget.ViewPager2;
 
@@ -16,12 +15,9 @@ import android.view.ViewGroup;
 import com.google.android.material.tabs.TabLayout;
 import com.google.android.material.tabs.TabLayoutMediator;
 import com.joeyderuiter.cookieclicker.R;
-import com.joeyderuiter.cookieclicker.models.game.CloneableFragment;
 import com.joeyderuiter.cookieclicker.models.game.TabItem;
-import com.joeyderuiter.cookieclicker.models.game.tabs.ScoreTab;
-import com.joeyderuiter.cookieclicker.models.game.tabs.StoreTab;
-
-import org.jetbrains.annotations.NotNull;
+import com.joeyderuiter.cookieclicker.fragments.game.tabs.ScoreTab;
+import com.joeyderuiter.cookieclicker.fragments.game.tabs.StoreTab;
 
 import java.util.ArrayList;
 import java.util.List;
