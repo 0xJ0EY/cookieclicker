@@ -67,7 +67,6 @@ public class CookieButton extends View {
         return Math.pow(x - centerX, 2) + Math.pow(y - centerY, 2) < Math.pow(radius, 2);
     }
 
-
     @Override
     protected void onSizeChanged(int w, int h, int oldw, int oldh) {
         super.onSizeChanged(w, h, oldw, oldh);
@@ -115,6 +114,5 @@ public class CookieButton extends View {
             offsetLeft + diameter,
             offsetTop + diameter
         );
-    };
-
+    }
 }
