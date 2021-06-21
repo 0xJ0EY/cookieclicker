@@ -60,8 +60,6 @@ public class StoreTab extends CloneableFragment {
                 if (!authService.isCurrentPlayer(player)) continue;
 
                 cookieCounter.setText("Cookies: " + player.getCookies());
-
-                System.out.println("player.getCookies() = " + player.getCookies());
             }
         });
     }

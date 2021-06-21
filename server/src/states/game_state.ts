@@ -30,6 +30,7 @@ export default class GameState implements State {
         if (!serverPlayer) return;
 
         serverPlayer.cookies += 1;
+        serverPlayer.total_cookies += 1;
     }
 
     onChange(server: Server): void {

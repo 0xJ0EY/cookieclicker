@@ -8,10 +8,8 @@ import android.content.Intent;
 import android.os.Bundle;
 
 import com.joeyderuiter.cookieclicker.adapters.LobbyListAdapter;
-import com.joeyderuiter.cookieclicker.models.user.Profile;
 import com.joeyderuiter.cookieclicker.services.LobbyService;
 import com.joeyderuiter.cookieclicker.services.LobbyServiceLocator;
-import com.joeyderuiter.cookieclicker.services.NetworkMessageService;
 
 public class LobbyActivity extends AppCompatActivity {
 
@@ -31,7 +29,7 @@ public class LobbyActivity extends AppCompatActivity {
     }
 
     private void setupLobbyListView() {
-        RecyclerView lobbyListView = (RecyclerView) findViewById(R.id.lobbyList);
+        RecyclerView lobbyListView = (RecyclerView) findViewById(R.id.score_list);
         LobbyListAdapter adapter = new LobbyListAdapter(this, this.lobbyService);
 
         lobbyListView.setAdapter(adapter);

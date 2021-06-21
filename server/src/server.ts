@@ -81,7 +81,7 @@ export default class Server {
                     player.isLeader     = this.players.size == 0;
                     player.isReady      = false;
                     player.cookies      = 0;
-                    player.total_cookies    = 0;
+                    player.total_cookies = 0;
                     player.structures   = [];
 
                     this.players.set(userId, player);

@@ -24,8 +24,6 @@ import com.joeyderuiter.cookieclicker.services.AuthService;
 import com.joeyderuiter.cookieclicker.services.AuthServiceLocator;
 import com.joeyderuiter.cookieclicker.viewmodels.GameViewModel;
 
-import org.jetbrains.annotations.NotNull;
-
 public class GameLobby extends Fragment {
 
     private GameViewModel gameViewModel;
@@ -43,7 +41,7 @@ public class GameLobby extends Fragment {
     }
 
     private void setupLobbyListView(View view) {
-        RecyclerView lobbyListView = (RecyclerView) view.findViewById(R.id.lobbyList);
+        RecyclerView lobbyListView = (RecyclerView) view.findViewById(R.id.lobby_list);
 
         GameLobbyListAdapter adapter = new GameLobbyListAdapter(
                 getViewLifecycleOwner(),
