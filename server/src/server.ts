@@ -62,8 +62,6 @@ export default class Server {
     private setupWebsocketServer(): ws.Server {
         const wss = new ws.Server({ clientTracking: false, noServer: true });
 
-        // let userId: string;
-
         this.httpServer.on('upgrade', (req, socket, head) => {
             const url = new URL('http://127.0.0.1/' + req.url);
 
@@ -161,16 +159,33 @@ export default class Server {
 
     stop() {
         if (this.status !== ServerStatus.STARTED) return;
+        
         console.log('Stopping the server.');
         
         removeServer(this.config);
+
         this.status = ServerStatus.STOPPED;
+    }
+
+    resetGame() {
+        console.log('Resetting the server.');
+
+        this.state = new LobbyState(this);
+
+        registerServerInLobbyList(this.config);
+        
+        this.status = ServerStatus.STARTED;
     }
 
     startGame() {
         this.state = new GameState(this);
 
         this.sendToAll("ChangeState", new ChangeState("GameState"));
+
+        // Remove the server from the serverlist
+        removeServer(this.config);
+
+        this.status = ServerStatus.STARTED;
     }
 
     sendToPlayer(playerId: string, objectType: string, object: any) {

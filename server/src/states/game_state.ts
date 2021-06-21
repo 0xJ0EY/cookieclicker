@@ -22,6 +22,9 @@ export default class GameState implements State {
 
     onDisconnect(player: Player): void {
         console.log(`Goodbye ${player.username}`);
+
+        if (this.server.players.size === 0)
+            this.server.resetGame();
     }
 
     onMessage(player: Player, message: NetworkMessage): void {
