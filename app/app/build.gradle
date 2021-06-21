@@ -58,4 +58,7 @@ dependencies {
     // Lombok (getter and setter generation)
     compileOnly 'org.projectlombok:lombok:1.18.20'
     annotationProcessor 'org.projectlombok:lombok:1.18.20'
+
+    // Viewpager2 (for the tabs)
+    implementation "androidx.viewpager2:viewpager2:1.0.0"
 }
