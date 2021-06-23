@@ -47,11 +47,11 @@ public class CookieButton extends View {
                 int eventX = (int) event.getX();
                 int eventY = (int) event.getY();
 
-                lastEvent = LocalTime.now();
-
                 if (InCircle(eventX, eventY)) {
                     if (this.onClickHandler != null)
                         this.onClickHandler.run();
+
+                    lastEvent = LocalTime.now();
                     return true;
                 }
             }
