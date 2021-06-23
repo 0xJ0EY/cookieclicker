@@ -12,6 +12,7 @@ import android.util.Log;
 import com.joeyderuiter.cookieclicker.fragments.game.Game;
 import com.joeyderuiter.cookieclicker.models.messages.ChangeState;
 import com.joeyderuiter.cookieclicker.models.messages.PlayerList;
+import com.joeyderuiter.cookieclicker.models.messages.ServerTime;
 import com.joeyderuiter.cookieclicker.services.AuthService;
 import com.joeyderuiter.cookieclicker.services.AuthServiceLocator;
 import com.joeyderuiter.cookieclicker.services.NetworkMessageService;
@@ -64,6 +65,11 @@ public class GameActivity extends AppCompatActivity {
 
             if (changeState.getNewState().equals(ChangeState.GAME_STATE))
                 showGameFragment();
+        });
+
+        handlers.put(ServerTime.class, decodedMessage -> {
+            ServerTime serverTime = (ServerTime) NetworkMessageService.getMessageData(decodedMessage, ServerTime.class);
+            gameViewModel.setServerTime(serverTime);
         });
 
         return handlers;

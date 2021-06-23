@@ -1,15 +1,19 @@
 import { Player } from "../models/player";
+import { ServerTime } from "../models/server_time";
 import Server from "../server";
 import { NetworkMessage } from "../util/messages";
+import { calculateTicksFromSeconds, isCurrentTick } from "../util/tick_rate";
 import State from "./state";
 
 export default class GameState implements State {
     
+    private serverTime: ServerTime;
     private messageHandlers: Map<string, (player: Player, message: NetworkMessage) => void>;
     private server: Server;
 
     constructor(server: Server) {
         this.messageHandlers = this.setupMessageHandlers();
+        this.serverTime = { timeLeft: 240, startTime: 240 } as ServerTime;
         this.server = server;
 
         console.log('starting game');
@@ -57,9 +61,13 @@ export default class GameState implements State {
         }
     }
 
-    onTick(): void {
-        // Do actions
+    onTick(currentTick: number): void {
         this.calculateNewPoints();
+
+        if (isCurrentTick(currentTick, calculateTicksFromSeconds(1.0))) {
+            this.serverTime.timeLeft -= 1;
+            this.server.sendToAll('ServerTime', this.serverTime);
+        }
 
         // Send the updated player state
         this.server.sharePlayerState();

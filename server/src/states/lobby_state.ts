@@ -72,7 +72,7 @@ export default class LobbyState implements State {
         return playerCount === playersReady;
     }
 
-    onTick(): void {
+    onTick(currentTick: number): void {
     }
 
 }

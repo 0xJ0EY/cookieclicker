@@ -145,7 +145,7 @@ export default class Server {
     }
 
     update() {
-        this.state.onTick();
+        this.state.onTick(this.currentTick);
         this.currentTick++;
     }
 

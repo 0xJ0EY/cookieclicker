@@ -5,3 +5,7 @@ export const calculateTicksFromSeconds = (seconds: number): number => {
 
     return Math.round(time / Server.TICK_RATE);
 }
+
+export const isCurrentTick = (currentTick: number, everyTick: number): boolean => {
+    return currentTick % everyTick === 0;
+}
