@@ -13,6 +13,7 @@ import WebSocket from "ws";
 import GameState from "./states/game_state";
 import PlayerList from "./models/network/player_list";
 import ChangeState from "./models/network/change_state";
+import PowerupService from "./services/powerups";
 
 enum ServerStatus {
     STARTED,
@@ -32,6 +33,7 @@ export default class Server {
     private wsServer: ws.Server;
 
     private authenticationService: AuthenticationService;
+    private powerupService: PowerupService;
 
     private state: State;
     private currentTick: number = 0;
@@ -47,14 +49,25 @@ export default class Server {
         this.wsServer   = this.setupWebsocketServer();
 
         this.authenticationService = new AuthenticationService();
+        this.powerupService = new PowerupService();
     }
 
     private setupHttpServer(): http.Server {
         const app = express();
 
         app.get('/', (req, res) => {
-            res.send('Hello world');
+            res.send('Hello gamers :^)');
         })
+
+        app.get('/shop/powerups', (req, res) => {
+            const playerId = req.header('X-Player-Id');
+            if (playerId == null) return [];
+
+            const player = this.players.get(playerId);
+            if (player == null) return [];
+
+            res.send(this.powerupService.listAll(player));
+        });
 
         return http.createServer(app);
     }
@@ -82,7 +95,7 @@ export default class Server {
                     player.isReady      = false;
                     player.cookies      = 0;
                     player.total_cookies = 0;
-                    player.structures   = [];
+                    player.powerups     = [];
 
                     this.players.set(userId, player);
 

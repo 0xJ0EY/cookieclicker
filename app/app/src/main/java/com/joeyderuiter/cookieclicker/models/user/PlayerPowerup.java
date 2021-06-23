@@ -1,15 +1,15 @@
 package com.joeyderuiter.cookieclicker.models.user;
 
-import com.joeyderuiter.cookieclicker.models.game.Structure;
+import com.joeyderuiter.cookieclicker.models.game.Powerup;
 
 import lombok.Getter;
 
-public class PlayerStructure {
+public class PlayerPowerup {
 
     @Getter
     private int amount;
 
     @Getter
-    private Structure structure;
+    private Powerup structure;
 
 }

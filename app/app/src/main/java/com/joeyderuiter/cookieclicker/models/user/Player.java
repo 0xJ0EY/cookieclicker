@@ -29,5 +29,5 @@ public class Player {
     private int totalCookies;
 
     @Getter
-    private List<PlayerStructure> structures;
+    private List<PlayerPowerup> powerups;
 }

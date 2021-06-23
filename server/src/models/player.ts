@@ -1,4 +1,4 @@
-import { PlayerStructure } from "./player_structure";
+import { PlayerPowerup } from "./player_powerup";
 
 export interface Player {
     id: string,
@@ -7,5 +7,5 @@ export interface Player {
     isReady: boolean,
     cookies: number,
     total_cookies: number,
-    structures: PlayerStructure[],
+    powerups: PlayerPowerup[],
 };
