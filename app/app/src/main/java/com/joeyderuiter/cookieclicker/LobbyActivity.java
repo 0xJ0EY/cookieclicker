@@ -8,6 +8,7 @@ import android.content.Intent;
 import android.os.Bundle;
 
 import com.joeyderuiter.cookieclicker.adapters.LobbyListAdapter;
+import com.joeyderuiter.cookieclicker.models.lobby.Server;
 import com.joeyderuiter.cookieclicker.services.LobbyService;
 import com.joeyderuiter.cookieclicker.services.LobbyServiceLocator;
 
@@ -25,7 +26,7 @@ public class LobbyActivity extends AppCompatActivity {
     }
 
     private void setupServices() {
-        this.lobbyService = LobbyServiceLocator.getInstance(this);
+        this.lobbyService = LobbyServiceLocator.getInstance();
     }
 
     private void setupLobbyListView() {
@@ -36,9 +37,9 @@ public class LobbyActivity extends AppCompatActivity {
         lobbyListView.setLayoutManager(new LinearLayoutManager(this));
     }
 
-    public void joinLobby(String ip) {
+    public void joinLobby(Server server) {
         Intent intent = new Intent(this, GameActivity.class);
-        intent.putExtra(GameActivity.ARGS_IP, ip);
+        intent.putExtra(GameActivity.ARGS_IP, server);
         startActivity(intent);
     }
 }

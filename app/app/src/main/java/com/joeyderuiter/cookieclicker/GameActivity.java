@@ -10,12 +10,14 @@ import android.os.Bundle;
 import android.util.Log;
 
 import com.joeyderuiter.cookieclicker.fragments.game.Game;
+import com.joeyderuiter.cookieclicker.models.lobby.Server;
 import com.joeyderuiter.cookieclicker.models.messages.ChangeState;
 import com.joeyderuiter.cookieclicker.models.messages.PlayerList;
 import com.joeyderuiter.cookieclicker.models.messages.ServerTime;
 import com.joeyderuiter.cookieclicker.services.AuthService;
 import com.joeyderuiter.cookieclicker.services.AuthServiceLocator;
 import com.joeyderuiter.cookieclicker.services.NetworkMessageService;
+import com.joeyderuiter.cookieclicker.services.StoreServiceLocator;
 import com.joeyderuiter.cookieclicker.viewmodels.GameViewModel;
 
 import org.java_websocket.client.WebSocketClient;
@@ -45,7 +47,13 @@ public class GameActivity extends AppCompatActivity {
         setContentView(R.layout.activity_game);
 
         Intent intent = getIntent();
-        String address = intent.getStringExtra(ARGS_IP);
+        Server server = (Server) intent.getSerializableExtra(ARGS_IP);
+
+        String address = server.ip + ":" + server.port;
+
+        StoreServiceLocator
+                .getInstance()
+                .configure(server);
 
         this.setupServices();
         this.setupViewModel();

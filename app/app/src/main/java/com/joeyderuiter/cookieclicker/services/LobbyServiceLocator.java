@@ -1,15 +1,11 @@
 package com.joeyderuiter.cookieclicker.services;
 
-import android.content.Context;
-
-import androidx.annotation.NonNull;
-
 public class LobbyServiceLocator {
     public static LobbyService instance;
 
     private LobbyServiceLocator() {}
 
-    public synchronized static LobbyService getInstance(@NonNull Context context) {
+    public synchronized static LobbyService getInstance() {
         if (instance == null) {
             instance = new LobbyService();
         }
