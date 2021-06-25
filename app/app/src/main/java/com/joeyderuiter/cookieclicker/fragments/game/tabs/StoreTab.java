@@ -10,9 +10,12 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.joeyderuiter.cookieclicker.GameActivity;
 import com.joeyderuiter.cookieclicker.R;
+import com.joeyderuiter.cookieclicker.adapters.PowerupStoreListAdapter;
 import com.joeyderuiter.cookieclicker.components.CookieButton;
 import com.joeyderuiter.cookieclicker.models.game.CloneableFragment;
 import com.joeyderuiter.cookieclicker.models.game.ShopPowerup;
@@ -71,6 +74,14 @@ public class StoreTab extends CloneableFragment {
         });
     }
 
+    private void setupPowerupStore(View view) {
+        RecyclerView storeListView = (RecyclerView) view.findViewById(R.id.powerup_store_list);
+        PowerupStoreListAdapter adapter = new PowerupStoreListAdapter(this.storeService);
+
+        storeListView.setAdapter(adapter);
+        storeListView.setLayoutManager(new LinearLayoutManager(requireContext()));
+    }
+
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
@@ -78,9 +89,6 @@ public class StoreTab extends CloneableFragment {
         this.setupViewModel();
         this.setupCookieButton(view);
         this.setupCookieCounter(view);
-
-        List<ShopPowerup> powerup = this.storeService.FetchShopPowerups();
-        System.out.println("powerup.size() = " + powerup.size());
-        System.out.println("powerup = " + powerup);
+        this.setupPowerupStore(view);
     }
 }
