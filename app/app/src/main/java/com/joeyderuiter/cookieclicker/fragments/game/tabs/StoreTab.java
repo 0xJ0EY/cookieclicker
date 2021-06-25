@@ -15,22 +15,29 @@ import com.joeyderuiter.cookieclicker.GameActivity;
 import com.joeyderuiter.cookieclicker.R;
 import com.joeyderuiter.cookieclicker.components.CookieButton;
 import com.joeyderuiter.cookieclicker.models.game.CloneableFragment;
+import com.joeyderuiter.cookieclicker.models.game.ShopPowerup;
 import com.joeyderuiter.cookieclicker.models.messages.CookieClick;
 import com.joeyderuiter.cookieclicker.models.user.Player;
 import com.joeyderuiter.cookieclicker.services.AuthService;
 import com.joeyderuiter.cookieclicker.services.AuthServiceLocator;
+import com.joeyderuiter.cookieclicker.services.StoreService;
+import com.joeyderuiter.cookieclicker.services.StoreServiceLocator;
 import com.joeyderuiter.cookieclicker.viewmodels.GameViewModel;
+
+import java.util.List;
 
 public class StoreTab extends CloneableFragment {
 
     private GameViewModel gameViewModel;
     private AuthService authService;
+    private StoreService storeService;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         this.authService = AuthServiceLocator.getInstance(requireContext());
+        this.storeService = StoreServiceLocator.getInstance(requireContext());
     }
 
     @Override
@@ -71,5 +78,9 @@ public class StoreTab extends CloneableFragment {
         this.setupViewModel();
         this.setupCookieButton(view);
         this.setupCookieCounter(view);
+
+        List<ShopPowerup> powerup = this.storeService.FetchShopPowerups();
+        System.out.println("powerup.size() = " + powerup.size());
+        System.out.println("powerup = " + powerup);
     }
 }

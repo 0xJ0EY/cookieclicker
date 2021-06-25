@@ -52,7 +52,7 @@ public class GameActivity extends AppCompatActivity {
         String address = server.ip + ":" + server.port;
 
         StoreServiceLocator
-                .getInstance()
+                .getInstance(this)
                 .configure(server);
 
         this.setupServices();

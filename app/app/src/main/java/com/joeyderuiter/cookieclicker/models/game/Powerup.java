@@ -7,6 +7,9 @@ import lombok.Getter;
 public class Powerup {
 
     @Getter
+    private int id;
+
+    @Getter
     private String name;
 
     @Getter

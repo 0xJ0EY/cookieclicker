@@ -60,11 +60,15 @@ export default class Server {
         })
 
         app.get('/shop/powerups', (req, res) => {
+            console.log(req);
+
             const playerId = req.header('X-Player-Id');
-            if (playerId == null) return [];
+            if (playerId == null)
+                return res.send([]);
 
             const player = this.players.get(playerId);
-            if (player == null) return [];
+            if (player == null)
+                return res.send([]);
 
             res.send(this.powerupService.listAll(player));
         });
