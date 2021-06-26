@@ -74,15 +74,7 @@ public class ChartTab extends CloneableFragment {
         chart.getXAxis().setEnabled(false);
         chart.setTouchEnabled(false);
 
-        List<ILineDataSet> dataSets1 = new ArrayList<>();
-        LineData data1 = new LineData(dataSets1);
-
-        chart.setData(data1);
-        chart.invalidate();
-
-
         List<ILineDataSet> dataSets = new ArrayList<>();
-
         LineData data = new LineData(dataSets);
         chart.setData(data);
         chart.invalidate();
