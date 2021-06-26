@@ -13,39 +13,93 @@ export default class PowerupService {
                 powerup: { id: 1, name: "Bronze dagger", pointsPerClick: 1 }
             },
             {
-                cost: this.calculateCost(25, 2, player),
+                cost: this.calculateCost(2_00, 2, player),
                 resource: "",
-                powerup: { id: 2, name: "Steel dagger", pointsPerClick: 5 }
+                powerup: { id: 2, name: "Steel dagger", pointsPerClick: 10 }
             },
             {
-                cost: this.calculateCost(100, 3, player),
+                cost: this.calculateCost(1_000, 3, player),
                 resource: "",
                 powerup: { id: 3, name: "Mithril dagger", pointsPerClick: 20 }
             },
             {
-                cost: this.calculateCost(250, 4, player),
+                cost: this.calculateCost(5_000, 4, player),
                 resource: "",
                 powerup: { id: 5, name: "Adamant dagger", pointsPerClick: 50 }
             },
             {
-                cost: this.calculateCost(500, 4, player),
+                cost: this.calculateCost(15_000, 5, player),
                 resource: "",
-                powerup: { id: 5, name: "Rune dagger", pointsPerClick: 100 }
+                powerup: { id: 5, name: "Rune dagger", pointsPerClick:  75 }
+            },
+            {
+                cost: this.calculateCost(50_000, 6, player),
+                resource: "",
+                powerup: { id: 5, name: "Dragon dagger", pointsPerClick: 100 }
             }
         ];
 
     }
 
-    private calculateCost(basePrice: number, powerupId: number, player: Player): number {
-        return basePrice;
+    public getPowerupById(powerupId: number): Powerup {
+        const all = this.listAll({} as Player);
+
+        for (let entry of all) {
+            if (entry.powerup.id == powerupId) {
+                return entry.powerup;
+            }
+        }
+        
+        throw Error("Invalid powerup id");
     }
 
-    private getAmountFromPlayerByPowerupId(player: Player, id: number) {
-        player.powerups.forEach(p => {
-            if (p.powerup.id == id) {
-                return p.amount;
-            }
+    public calculateCookiesPerClick(player: Player): number {
+        let result = 1;
+
+        player.powerups.forEach(entry => {
+            const points = entry.amount * entry.powerup.pointsPerClick;
+
+            result += points;
         });
+
+        return result;
+    }
+
+    public getCost(player: Player, powerupId: number): number {
+        const all = this.listAll(player);
+
+        for (let entry of all) {
+            if (entry.powerup.id == powerupId) {
+                return entry.cost;
+            }
+        }
+
+        throw Error("Invalid powerup id");
+    }
+
+    private calculateCost(basePrice: number, powerupId: number, player: Player): number {
+        let amount = this.getAmountFromPlayerByPowerupId(player, powerupId);
+        amount += 1;
+
+        let price = basePrice;
+
+        for (let i = 1; i <= amount; i++) {
+            price *= i;
+        }
+        
+        return price;
+    }
+
+    private getAmountFromPlayerByPowerupId(player: Player, id: number): number {
+        if (!player.powerups) return 0; 
+
+        for (let entry of player.powerups) {
+            if (entry.powerup.id == id) {
+                return entry.amount;
+            }
+        }
+
+        return 0;
     }
 
 }

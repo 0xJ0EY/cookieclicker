@@ -76,7 +76,13 @@ public class StoreTab extends CloneableFragment {
 
     private void setupPowerupStore(View view) {
         RecyclerView storeListView = (RecyclerView) view.findViewById(R.id.powerup_store_list);
-        PowerupStoreListAdapter adapter = new PowerupStoreListAdapter(this.storeService);
+
+        PowerupStoreListAdapter adapter = new PowerupStoreListAdapter(
+                (GameActivity) requireActivity(),
+                this.storeService,
+                this.authService,
+                this.gameViewModel
+        );
 
         storeListView.setAdapter(adapter);
         storeListView.setLayoutManager(new LinearLayoutManager(requireContext()));

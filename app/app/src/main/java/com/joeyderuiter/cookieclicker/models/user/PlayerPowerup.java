@@ -10,6 +10,6 @@ public class PlayerPowerup {
     private int amount;
 
     @Getter
-    private Powerup structure;
+    private Powerup powerup;
 
 }

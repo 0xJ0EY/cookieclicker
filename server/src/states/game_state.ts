@@ -1,6 +1,10 @@
 import { Player } from "../models/player";
+import { PlayerPowerup } from "../models/player_powerup";
+import { Powerup } from "../models/powerup";
+import PurchasePowerup from "../models/purchase_powerup";
 import { ServerTime } from "../models/server_time";
 import Server from "../server";
+import PowerupService from "../services/powerups";
 import { NetworkMessage } from "../util/messages";
 import { calculateTicksFromSeconds, isCurrentTick } from "../util/tick_rate";
 import State from "./state";
@@ -10,11 +14,13 @@ export default class GameState implements State {
     private serverTime: ServerTime;
     private messageHandlers: Map<string, (player: Player, message: NetworkMessage) => void>;
     private server: Server;
+    private powerupService: PowerupService;
 
     constructor(server: Server) {
         this.messageHandlers = this.setupMessageHandlers();
         this.serverTime = { timeLeft: 240, startTime: 240 } as ServerTime;
         this.server = server;
+        this.powerupService = new PowerupService();
 
         console.log('starting game');
     }
@@ -26,6 +32,12 @@ export default class GameState implements State {
             this.incrementScore(player);
         }); 
 
+        handlers.set("PurchasePowerup", (player, message) => {
+            const purchasePowerup: PurchasePowerup = message.object;
+
+            this.purchasePowerup(player, purchasePowerup.powerup);
+        });
+
         return handlers;
     }
 
@@ -33,8 +45,43 @@ export default class GameState implements State {
         const serverPlayer = this.server.players.get(player.id);
         if (!serverPlayer) return;
 
-        serverPlayer.cookies += 1;
-        serverPlayer.total_cookies += 1;
+
+        const cookiesPerClick = this.powerupService.calculateCookiesPerClick(serverPlayer);
+
+        serverPlayer.cookies += cookiesPerClick;
+        serverPlayer.total_cookies += cookiesPerClick;
+    }
+
+    private purchasePowerup(player: Player, powerup: Powerup): void {
+        const serverPlayer = this.server.players.get(player.id);
+        if (!serverPlayer) return;
+
+        console.log(powerup);
+    
+        
+        // Fetch the correct cookie cost from the store
+        const cost = this.powerupService.getCost(serverPlayer, powerup.id);
+        const serverPowerup = this.powerupService.getPowerupById(powerup.id);
+
+        // Check if the player has the cookies to buy it
+        if (serverPlayer.cookies < cost) return;
+
+        console.log(cost);
+        
+
+        serverPlayer.cookies -= cost;
+
+        this.addPowerup(serverPlayer, serverPowerup);
+    }
+
+    private addPowerup(player: Player, powerup: Powerup) {
+        player.powerups.forEach(playerPowerup => {
+            if (playerPowerup.powerup.id === powerup.id) {
+                playerPowerup.amount += 1;
+            } 
+        });
+
+        player.powerups.push({ amount: 1, powerup } as PlayerPowerup)
     }
 
     onChange(server: Server): void {
