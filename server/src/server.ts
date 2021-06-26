@@ -14,6 +14,7 @@ import GameState from "./states/game_state";
 import PlayerList from "./models/network/player_list";
 import ChangeState from "./models/network/change_state";
 import PowerupService from "./services/powerups";
+import { PlayerScores } from "./models/player_score";
 
 enum ServerStatus {
     STARTED,
@@ -37,6 +38,8 @@ export default class Server {
 
     private state: State;
     private currentTick: number = 0;
+
+    public scores: PlayerScores[] = [];
     
     constructor(config: ServerConfig) {
         this.status = ServerStatus.STOPPED;
@@ -150,6 +153,7 @@ export default class Server {
             this.update();
         }, Server.TICK_RATE);
 
+        this.scores = [];
         this.status = ServerStatus.STARTED;
     }
 

@@ -14,6 +14,7 @@ import com.joeyderuiter.cookieclicker.models.lobby.Server;
 import com.joeyderuiter.cookieclicker.models.messages.ChangeState;
 import com.joeyderuiter.cookieclicker.models.messages.PlayerList;
 import com.joeyderuiter.cookieclicker.models.messages.ServerTime;
+import com.joeyderuiter.cookieclicker.models.scores.PlayerScoresContainer;
 import com.joeyderuiter.cookieclicker.services.AuthService;
 import com.joeyderuiter.cookieclicker.services.AuthServiceLocator;
 import com.joeyderuiter.cookieclicker.services.NetworkMessageService;
@@ -78,6 +79,13 @@ public class GameActivity extends AppCompatActivity {
         handlers.put(ServerTime.class, decodedMessage -> {
             ServerTime serverTime = (ServerTime) NetworkMessageService.getMessageData(decodedMessage, ServerTime.class);
             gameViewModel.setServerTime(serverTime);
+        });
+
+        handlers.put(PlayerScoresContainer.class, decodedMessage -> {
+           PlayerScoresContainer scoresContainer = (PlayerScoresContainer) NetworkMessageService
+                   .getMessageData(decodedMessage, PlayerScoresContainer.class);
+
+           gameViewModel.setPlayerScoreContainer(scoresContainer);
         });
 
         return handlers;

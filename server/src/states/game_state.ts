@@ -1,5 +1,6 @@
 import { Player } from "../models/player";
 import { PlayerPowerup } from "../models/player_powerup";
+import { PlayerScore, PlayerScores, PlayerScoresContainer } from "../models/player_score";
 import { Powerup } from "../models/powerup";
 import PurchasePowerup from "../models/purchase_powerup";
 import { ServerTime } from "../models/server_time";
@@ -116,8 +117,33 @@ export default class GameState implements State {
             this.server.sendToAll('ServerTime', this.serverTime);
         }
 
+        if (isCurrentTick(currentTick, calculateTicksFromSeconds(5.0))) {
+            this.storePlayerScore();
+        }
+
         // Send the updated player state
         this.server.sharePlayerState();
+    }
+
+    private storePlayerScore(): void {
+
+        const scores: PlayerScore[] = [];
+
+        this.server.players.forEach(player => {
+            const score: PlayerScore = {
+                score: player.total_cookies,
+                player: player.id
+            };
+
+            scores.push(score);
+        });
+
+        const time = this.server.scores.length * 5;
+
+        const playerScores: PlayerScores = { time, scores };
+        this.server.scores.push(playerScores);
+
+        this.server.sendToAll("PlayerScoresContainer", { playerScores: this.server.scores } as PlayerScoresContainer);
     }
 
     private calculateNewPoints(): void {
