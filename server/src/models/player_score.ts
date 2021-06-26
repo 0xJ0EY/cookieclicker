@@ -8,6 +8,6 @@ export interface PlayerScores {
 }
 
 export interface PlayerScore {
-    player: string,
+    playerId: string,
     score: number
 }

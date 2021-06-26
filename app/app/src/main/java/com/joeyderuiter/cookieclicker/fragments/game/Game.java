@@ -17,6 +17,7 @@ import android.widget.ProgressBar;
 import com.google.android.material.tabs.TabLayout;
 import com.google.android.material.tabs.TabLayoutMediator;
 import com.joeyderuiter.cookieclicker.R;
+import com.joeyderuiter.cookieclicker.fragments.game.tabs.ChartTab;
 import com.joeyderuiter.cookieclicker.models.game.TabItem;
 import com.joeyderuiter.cookieclicker.fragments.game.tabs.ScoreTab;
 import com.joeyderuiter.cookieclicker.fragments.game.tabs.StoreTab;
@@ -40,6 +41,7 @@ public class Game extends Fragment {
 
         items.add(new TabItem("Store", new StoreTab()));
         items.add(new TabItem("Score", new ScoreTab()));
+        items.add(new TabItem("Chart", new ChartTab()));
 
         return items;
     }

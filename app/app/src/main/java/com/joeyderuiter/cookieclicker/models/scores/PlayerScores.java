@@ -6,7 +6,7 @@ import lombok.Getter;
 
 public class PlayerScores {
     @Getter
-    private int number;
+    private int time;
 
     @Getter
     private List<PlayerScore> scores;

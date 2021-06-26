@@ -132,7 +132,7 @@ export default class GameState implements State {
         this.server.players.forEach(player => {
             const score: PlayerScore = {
                 score: player.total_cookies,
-                player: player.id
+                playerId: player.id
             };
 
             scores.push(score);
