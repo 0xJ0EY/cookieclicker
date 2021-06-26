@@ -117,7 +117,7 @@ export default class GameState implements State {
             this.server.sendToAll('ServerTime', this.serverTime);
         }
 
-        if (isCurrentTick(currentTick, calculateTicksFromSeconds(5.0))) {
+        if (isCurrentTick(currentTick, calculateTicksFromSeconds(1.0))) {
             this.storePlayerScore();
         }
 
@@ -138,10 +138,12 @@ export default class GameState implements State {
             scores.push(score);
         });
 
-        const time = this.server.scores.length * 5;
+        const time = this.server.scores.length;
 
         const playerScores: PlayerScores = { time, scores };
         this.server.scores.push(playerScores);
+
+        console.log('Sending current player scores');
 
         this.server.sendToAll("PlayerScoresContainer", { playerScores: this.server.scores } as PlayerScoresContainer);
     }
