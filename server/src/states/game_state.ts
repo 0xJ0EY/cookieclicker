@@ -1,3 +1,4 @@
+import ChangeState from "../models/network/change_state";
 import { Player } from "../models/player";
 import { PlayerPowerup } from "../models/player_powerup";
 import { PlayerScore, PlayerScores, PlayerScoresContainer } from "../models/player_score";
@@ -22,6 +23,8 @@ export default class GameState implements State {
         this.serverTime = { timeLeft: 240, startTime: 240 } as ServerTime;
         this.server = server;
         this.powerupService = new PowerupService();
+
+        server.sendToAll("ChangeState", new ChangeState("GameState"));
 
         console.log('starting game');
     }
@@ -115,6 +118,9 @@ export default class GameState implements State {
         if (isCurrentTick(currentTick, calculateTicksFromSeconds(1.0))) {
             this.serverTime.timeLeft -= 1;
             this.server.sendToAll('ServerTime', this.serverTime);
+
+            if (this.serverTime.timeLeft <= 0)
+                this.server.endGame();
         }
 
         if (isCurrentTick(currentTick, calculateTicksFromSeconds(1.0))) {

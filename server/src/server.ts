@@ -15,6 +15,7 @@ import PlayerList from "./models/network/player_list";
 import ChangeState from "./models/network/change_state";
 import PowerupService from "./services/powerups";
 import { PlayerScores } from "./models/player_score";
+import EndState from "./states/end_state";
 
 enum ServerStatus {
     STARTED,
@@ -208,6 +209,11 @@ export default class Server {
         removeServer(this.config);
 
         this.status = ServerStatus.STARTED;
+    }
+
+    endGame() {
+        this.state = new EndState(this);
+        this.status = ServerStatus.STOPPED;
     }
 
     sendToPlayer(playerId: string, objectType: string, object: any) {

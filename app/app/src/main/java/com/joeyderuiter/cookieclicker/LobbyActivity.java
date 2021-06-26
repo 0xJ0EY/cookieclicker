@@ -40,6 +40,7 @@ public class LobbyActivity extends AppCompatActivity {
     public void joinLobby(Server server) {
         Intent intent = new Intent(this, GameActivity.class);
         intent.putExtra(GameActivity.ARGS_IP, server);
+        intent.setFlags(intent.getFlags() | Intent.FLAG_ACTIVITY_NO_HISTORY);
         startActivity(intent);
     }
 }

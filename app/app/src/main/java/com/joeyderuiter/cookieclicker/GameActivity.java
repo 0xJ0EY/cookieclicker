@@ -74,6 +74,8 @@ public class GameActivity extends AppCompatActivity {
 
             if (changeState.getNewState().equals(ChangeState.GAME_STATE))
                 showGameFragment();
+            if (changeState.getNewState().equals(ChangeState.END_STATE))
+                showEndActivity();
         });
 
         handlers.put(ServerTime.class, decodedMessage -> {
@@ -160,6 +162,11 @@ public class GameActivity extends AppCompatActivity {
         transaction.addToBackStack(null);
 
         transaction.commit();
+    }
+
+    private void showEndActivity() {
+        Intent intent = new Intent(this, EndActivity.class);
+        startActivity(intent);
     }
 
 }
