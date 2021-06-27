@@ -4,6 +4,7 @@ import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -12,8 +13,10 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.joeyderuiter.cookieclicker.R;
 import com.joeyderuiter.cookieclicker.models.NumberFormatFactory;
+import com.joeyderuiter.cookieclicker.models.game.Powerup;
 import com.joeyderuiter.cookieclicker.models.messages.PlayerList;
 import com.joeyderuiter.cookieclicker.models.user.Player;
+import com.joeyderuiter.cookieclicker.models.user.PlayerPowerup;
 import com.joeyderuiter.cookieclicker.viewmodels.GameViewModel;
 
 import org.jetbrains.annotations.NotNull;
@@ -25,11 +28,14 @@ import lombok.Getter;
 
 public class GameScoreListAdapter extends RecyclerView.Adapter<GameScoreListAdapter.ViewHolder> {
 
+    private Context context;
     private PlayerList playerList;
 
-    public GameScoreListAdapter(LifecycleOwner lifecycleOwner, GameViewModel gameViewModel) {
+    public GameScoreListAdapter(Context context, LifecycleOwner lifecycleOwner, GameViewModel gameViewModel) {
+        this.context = context;
+
         gameViewModel.getPlayers().observe(lifecycleOwner, playerList -> {
-            playerList.getPlayers().sort((x, y)-> y.getTotalCookies() - x.getTotalCookies());
+            playerList.getPlayers().sort((x, y)-> (int) (y.getTotalCookies() - x.getTotalCookies()));
             this.playerList = playerList;
 
             notifyDataSetChanged();
@@ -52,7 +58,7 @@ public class GameScoreListAdapter extends RecyclerView.Adapter<GameScoreListAdap
     public void onBindViewHolder(@NonNull @NotNull GameScoreListAdapter.ViewHolder holder, int position) {
         Player player = playerList.getPlayers().get(position);
 
-        int totalCookies = player.getTotalCookies();
+        long totalCookies = player.getTotalCookies();
 
         holder.getPlayerName().setText(player.getUsername());
 
@@ -64,6 +70,28 @@ public class GameScoreListAdapter extends RecyclerView.Adapter<GameScoreListAdap
                 scoreFormat + " cookies";
 
         holder.getPlayerTotalCookies().setText(cookieText);
+
+        renderPlayerPowerups(holder, player);
+
+    }
+
+    private void renderPlayerPowerups(GameScoreListAdapter.ViewHolder holder, Player player) {
+        LinearLayout layout = holder.getPlayerPowerupContainer();
+        layout.removeAllViewsInLayout();
+
+        for (PlayerPowerup playerPowerup : player.getPowerups()) {
+            TextView textView = new TextView(context);
+
+            NumberFormat nf = NumberFormatFactory.getInstance();
+            String amountFormat = nf.format(playerPowerup.getAmount());
+
+            String powerupText = amountFormat + " " + playerPowerup.getPowerup().getName();
+
+            textView.setWidth(layout.getWidth());
+
+            textView.setText(powerupText);
+            layout.addView(textView);
+        }
     }
 
     @Override
@@ -83,11 +111,15 @@ public class GameScoreListAdapter extends RecyclerView.Adapter<GameScoreListAdap
         @Getter
         private final TextView playerTotalCookies;
 
+        @Getter
+        private final LinearLayout playerPowerupContainer;
+
         public ViewHolder(View itemView) {
             super(itemView);
 
             playerName          = (TextView) itemView.findViewById(R.id.player_name);
             playerTotalCookies  = (TextView) itemView.findViewById(R.id.player_total_cookies);
+            playerPowerupContainer = (LinearLayout) itemView.findViewById(R.id.player_powerup_container);
         }
     }
 

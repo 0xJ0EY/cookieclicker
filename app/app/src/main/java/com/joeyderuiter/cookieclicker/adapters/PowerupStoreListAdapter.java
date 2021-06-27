@@ -40,7 +40,7 @@ public class PowerupStoreListAdapter extends RecyclerView.Adapter<PowerupStoreLi
     private final StoreService storeService;
     private final AuthService authService;
 
-    private int amountOfCookies = 0;
+    private long amountOfCookies = 0;
 
     private Player player;
 

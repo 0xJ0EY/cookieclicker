@@ -43,6 +43,7 @@ public class ScoreTab extends CloneableFragment {
         RecyclerView lobbyListView = (RecyclerView) view.findViewById(R.id.score_list);
 
         GameScoreListAdapter adapter = new GameScoreListAdapter(
+                requireContext(),
                 getViewLifecycleOwner(),
                 this.gameViewModel
         );

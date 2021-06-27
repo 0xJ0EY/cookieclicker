@@ -20,7 +20,7 @@ export default class GameState implements State {
 
     constructor(server: Server) {
         this.messageHandlers = this.setupMessageHandlers();
-        this.serverTime = { timeLeft: 30, startTime: 240 } as ServerTime;
+        this.serverTime = { timeLeft: 120, startTime: 120 } as ServerTime;
         this.server = server;
         this.powerupService = new PowerupService();
 
@@ -75,13 +75,18 @@ export default class GameState implements State {
     }
 
     private addPowerup(player: Player, powerup: Powerup) {
+        let found = false;
+
         player.powerups.forEach(playerPowerup => {
             if (playerPowerup.powerup.id === powerup.id) {
                 playerPowerup.amount += 1;
+
+                found = true;
             } 
         });
 
-        player.powerups.push({ amount: 1, powerup } as PlayerPowerup)
+        if (!found)
+            player.powerups.push({ amount: 1, powerup } as PlayerPowerup)
     }
 
     onChange(server: Server): void {

@@ -22,11 +22,11 @@ public class Player {
     private boolean ready;
 
     @Getter
-    private int cookies;
+    private long cookies;
 
     @Getter
     @JsonProperty("total_cookies")
-    private int totalCookies;
+    private long totalCookies;
 
     @Getter
     private List<PlayerPowerup> powerups;

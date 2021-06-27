@@ -8,6 +8,6 @@ public class PlayerScore {
     private String playerId;
 
     @Getter
-    private int score;
+    private long score;
 
 }
