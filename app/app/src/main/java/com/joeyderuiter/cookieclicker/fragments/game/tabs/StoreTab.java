@@ -17,6 +17,7 @@ import com.joeyderuiter.cookieclicker.GameActivity;
 import com.joeyderuiter.cookieclicker.R;
 import com.joeyderuiter.cookieclicker.adapters.PowerupStoreListAdapter;
 import com.joeyderuiter.cookieclicker.components.CookieButton;
+import com.joeyderuiter.cookieclicker.models.NumberFormatFactory;
 import com.joeyderuiter.cookieclicker.models.game.CloneableFragment;
 import com.joeyderuiter.cookieclicker.models.game.ShopPowerup;
 import com.joeyderuiter.cookieclicker.models.messages.CookieClick;
@@ -27,7 +28,9 @@ import com.joeyderuiter.cookieclicker.services.StoreService;
 import com.joeyderuiter.cookieclicker.services.StoreServiceLocator;
 import com.joeyderuiter.cookieclicker.viewmodels.GameViewModel;
 
+import java.text.NumberFormat;
 import java.util.List;
+import java.util.Locale;
 
 public class StoreTab extends CloneableFragment {
 
@@ -69,7 +72,14 @@ public class StoreTab extends CloneableFragment {
             for (Player player : playerList.getPlayers()) {
                 if (!authService.isCurrentPlayer(player)) continue;
 
-                cookieCounter.setText("Cookies: " + player.getCookies());
+                NumberFormat nf = NumberFormatFactory.getInstance();
+                String scoreFormat = nf.format(player.getCookies());
+
+                String cookieText = player.getCookies() == 1 ?
+                        scoreFormat + " cookie" :
+                        scoreFormat + " cookies";
+
+                cookieCounter.setText(cookieText);
             }
         });
     }

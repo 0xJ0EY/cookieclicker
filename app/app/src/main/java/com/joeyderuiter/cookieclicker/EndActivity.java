@@ -14,6 +14,7 @@ import com.github.mikephil.charting.data.LineData;
 import com.github.mikephil.charting.data.LineDataSet;
 import com.github.mikephil.charting.interfaces.datasets.ILineDataSet;
 import com.joeyderuiter.cookieclicker.helper.DatabaseHelper;
+import com.joeyderuiter.cookieclicker.models.NumberFormatFactory;
 import com.joeyderuiter.cookieclicker.models.lobby.Server;
 import com.joeyderuiter.cookieclicker.models.messages.EndData;
 import com.joeyderuiter.cookieclicker.models.scores.PlayerScore;
@@ -22,9 +23,11 @@ import com.joeyderuiter.cookieclicker.models.user.Player;
 import com.joeyderuiter.cookieclicker.services.EndService;
 import com.joeyderuiter.cookieclicker.services.EndServiceLocator;
 
+import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 
 public class EndActivity extends AppCompatActivity {
@@ -67,7 +70,12 @@ public class EndActivity extends AppCompatActivity {
     private void setCurrentScore() {
         int currentScore = this.endData.getPersonalScore();
         TextView textView = this.findViewById(R.id.end_current_score);
-        textView.setText(String.valueOf(currentScore));
+
+        NumberFormat nf = NumberFormatFactory.getInstance();
+        String scoreFormat = nf.format(currentScore);
+
+        String currentScoreText = "Current score: " + (currentScore == 1 ? scoreFormat + " cookie" : scoreFormat + " cookies");
+        textView.setText(currentScoreText);
     }
 
     private void setHighScore() {
@@ -76,7 +84,12 @@ public class EndActivity extends AppCompatActivity {
 
         int highScore = dbHelper.getHighScore();
         TextView textView = this.findViewById(R.id.end_high_score);
-        textView.setText(String.valueOf(highScore));
+
+        NumberFormat nf = NumberFormatFactory.getInstance();
+        String highScoreFormat = nf.format(highScore);
+
+        String highScoreText = "Personal high score: " + (highScore == 1 ? highScoreFormat + " cookie" : highScoreFormat + " cookies");
+        textView.setText(highScoreText);
     }
 
     private void drawPlayerGraph() {

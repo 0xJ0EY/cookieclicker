@@ -11,11 +11,15 @@ import androidx.lifecycle.LifecycleOwner;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.joeyderuiter.cookieclicker.R;
+import com.joeyderuiter.cookieclicker.models.NumberFormatFactory;
 import com.joeyderuiter.cookieclicker.models.messages.PlayerList;
 import com.joeyderuiter.cookieclicker.models.user.Player;
 import com.joeyderuiter.cookieclicker.viewmodels.GameViewModel;
 
 import org.jetbrains.annotations.NotNull;
+
+import java.text.NumberFormat;
+import java.util.Locale;
 
 import lombok.Getter;
 
@@ -51,7 +55,15 @@ public class GameScoreListAdapter extends RecyclerView.Adapter<GameScoreListAdap
         int totalCookies = player.getTotalCookies();
 
         holder.getPlayerName().setText(player.getUsername());
-        holder.getPlayerTotalCookies().setText(String.valueOf(totalCookies));
+
+        NumberFormat nf = NumberFormatFactory.getInstance();
+        String scoreFormat = nf.format(totalCookies);
+
+        String cookieText = totalCookies == 1 ?
+                scoreFormat + " cookie" :
+                scoreFormat + " cookies";
+
+        holder.getPlayerTotalCookies().setText(cookieText);
     }
 
     @Override

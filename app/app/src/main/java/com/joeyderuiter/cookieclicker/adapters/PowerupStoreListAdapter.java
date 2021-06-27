@@ -14,6 +14,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.joeyderuiter.cookieclicker.GameActivity;
 import com.joeyderuiter.cookieclicker.R;
+import com.joeyderuiter.cookieclicker.models.NumberFormatFactory;
 import com.joeyderuiter.cookieclicker.models.game.Powerup;
 import com.joeyderuiter.cookieclicker.models.game.ShopPowerup;
 import com.joeyderuiter.cookieclicker.models.messages.PurchasePowerup;
@@ -25,6 +26,7 @@ import com.joeyderuiter.cookieclicker.viewmodels.GameViewModel;
 
 import org.w3c.dom.Text;
 
+import java.text.NumberFormat;
 import java.util.ArrayList;
 
 import lombok.Getter;
@@ -106,7 +108,10 @@ public class PowerupStoreListAdapter extends RecyclerView.Adapter<PowerupStoreLi
 
         holder.getPowerupName().setText(powerup.getPowerup().getName());
 
-        String cost = powerup.getCost() + " cookies";
+        NumberFormat nf = NumberFormatFactory.getInstance();
+        String costFormat = nf.format(powerup.getCost());
+
+        String cost = costFormat + " cookies";
         holder.getPowerupCost().setText(cost);
 
         String amount = String.valueOf(this.getAmountOfPowerup(powerup.getPowerup()));
