@@ -13,15 +13,14 @@ import com.github.mikephil.charting.data.Entry;
 import com.github.mikephil.charting.data.LineData;
 import com.github.mikephil.charting.data.LineDataSet;
 import com.github.mikephil.charting.interfaces.datasets.ILineDataSet;
+import com.joeyderuiter.cookieclicker.helper.DatabaseHelper;
 import com.joeyderuiter.cookieclicker.models.lobby.Server;
 import com.joeyderuiter.cookieclicker.models.messages.EndData;
-import com.joeyderuiter.cookieclicker.models.messages.PlayerList;
 import com.joeyderuiter.cookieclicker.models.scores.PlayerScore;
 import com.joeyderuiter.cookieclicker.models.scores.PlayerScores;
 import com.joeyderuiter.cookieclicker.models.user.Player;
 import com.joeyderuiter.cookieclicker.services.EndService;
 import com.joeyderuiter.cookieclicker.services.EndServiceLocator;
-import com.joeyderuiter.cookieclicker.services.StoreServiceLocator;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -32,6 +31,7 @@ public class EndActivity extends AppCompatActivity {
 
     private EndService endService;
     private EndData endData;
+    private DatabaseHelper dbHelper;
 
     private static final int[] colours = {
             Color.rgb(64, 89, 128),
@@ -52,8 +52,11 @@ public class EndActivity extends AppCompatActivity {
         endService = EndServiceLocator.getInstance(this);
         endService.configure(server);
 
+        dbHelper = new DatabaseHelper(this);
+
         this.fetchEndData();
         this.setCurrentScore();
+        this.setHighScore();
         this.drawPlayerGraph();
     }
 
@@ -65,6 +68,15 @@ public class EndActivity extends AppCompatActivity {
         int currentScore = this.endData.getPersonalScore();
         TextView textView = this.findViewById(R.id.end_current_score);
         textView.setText(String.valueOf(currentScore));
+    }
+
+    private void setHighScore() {
+        int currentScore = this.endData.getPersonalScore();
+        dbHelper.insertScore(currentScore);
+
+        int highScore = dbHelper.getHighScore();
+        TextView textView = this.findViewById(R.id.end_high_score);
+        textView.setText(String.valueOf(highScore));
     }
 
     private void drawPlayerGraph() {
