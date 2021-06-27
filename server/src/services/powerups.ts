@@ -4,7 +4,7 @@ import ShopPowerup from "../models/shop_powerup";
 
 export default class PowerupService {
     
-    listAll(player: Player): ShopPowerup[] {
+    public listAll(player: Player): ShopPowerup[] {
 
         return [
             {

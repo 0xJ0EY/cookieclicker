@@ -16,6 +16,7 @@ import ChangeState from "./models/network/change_state";
 import PowerupService from "./services/powerups";
 import { PlayerScores } from "./models/player_score";
 import EndState from "./states/end_state";
+import EndService from "./services/end";
 
 enum ServerStatus {
     STARTED,
@@ -36,6 +37,7 @@ export default class Server {
 
     private authenticationService: AuthenticationService;
     private powerupService: PowerupService;
+    private endService: EndService;
 
     private state: State;
     private currentTick: number = 0;
@@ -54,6 +56,7 @@ export default class Server {
 
         this.authenticationService = new AuthenticationService();
         this.powerupService = new PowerupService();
+        this.endService = new EndService();
     }
 
     private setupHttpServer(): http.Server {
@@ -61,7 +64,19 @@ export default class Server {
 
         app.get('/', (req, res) => {
             res.send('Hello gamers :^)');
-        })
+        });
+
+        app.get('/end', (req, res) => {
+            const playerId = req.header('X-Player-Id');
+            if (playerId == null)
+                return res.send([]);
+
+            const player = this.players.get(playerId);
+            if (player == null)
+                return res.send([]);
+    
+            res.send(this.endService.getEndData(player, this));
+        });
 
         app.get('/shop/powerups', (req, res) => {
             const playerId = req.header('X-Player-Id');
@@ -203,7 +218,6 @@ export default class Server {
     startGame() {
         this.state = new GameState(this);
 
-        this.sendToAll("ChangeState", new ChangeState("GameState"));
 
         // Remove the server from the serverlist
         removeServer(this.config);
@@ -215,6 +229,7 @@ export default class Server {
         this.state = new EndState(this);
         this.status = ServerStatus.STOPPED;
     }
+
 
     sendToPlayer(playerId: string, objectType: string, object: any) {
         const message = encodeMessage({objectType, object});

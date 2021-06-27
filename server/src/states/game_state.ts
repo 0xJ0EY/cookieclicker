@@ -20,7 +20,7 @@ export default class GameState implements State {
 
     constructor(server: Server) {
         this.messageHandlers = this.setupMessageHandlers();
-        this.serverTime = { timeLeft: 240, startTime: 240 } as ServerTime;
+        this.serverTime = { timeLeft: 10, startTime: 240 } as ServerTime;
         this.server = server;
         this.powerupService = new PowerupService();
 
@@ -49,7 +49,6 @@ export default class GameState implements State {
         const serverPlayer = this.server.players.get(player.id);
         if (!serverPlayer) return;
 
-
         const cookiesPerClick = this.powerupService.calculateCookiesPerClick(serverPlayer);
 
         serverPlayer.cookies += cookiesPerClick;
@@ -69,9 +68,6 @@ export default class GameState implements State {
 
         // Check if the player has the cookies to buy it
         if (serverPlayer.cookies < cost) return;
-
-        console.log(cost);
-        
 
         serverPlayer.cookies -= cost;
 

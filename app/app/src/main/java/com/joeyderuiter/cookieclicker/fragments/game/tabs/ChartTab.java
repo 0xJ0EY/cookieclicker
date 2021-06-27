@@ -12,7 +12,6 @@ import androidx.lifecycle.ViewModelProvider;
 
 import com.github.mikephil.charting.charts.LineChart;
 import com.github.mikephil.charting.components.Legend;
-import com.github.mikephil.charting.components.YAxis;
 import com.github.mikephil.charting.data.Entry;
 import com.github.mikephil.charting.data.LineData;
 import com.github.mikephil.charting.data.LineDataSet;
@@ -34,7 +33,6 @@ public class ChartTab extends CloneableFragment {
 
     private GameViewModel gameViewModel;
     private LineChart chart;
-
 
     private static final int[] colours = {
             Color.rgb(64, 89, 128),

@@ -39,6 +39,7 @@ public class GameActivity extends AppCompatActivity {
     private AuthService authService;
 
     private GameViewModel gameViewModel;
+    private Server server;
 
     private final Map<Class<?>, Consumer<String>> messageHandlers = this.setupMessageHandlers();
 
@@ -48,7 +49,7 @@ public class GameActivity extends AppCompatActivity {
         setContentView(R.layout.activity_game);
 
         Intent intent = getIntent();
-        Server server = (Server) intent.getSerializableExtra(ARGS_IP);
+        server = (Server) intent.getSerializableExtra(ARGS_IP);
 
         String address = server.ip + ":" + server.port;
 
@@ -166,6 +167,7 @@ public class GameActivity extends AppCompatActivity {
 
     private void showEndActivity() {
         Intent intent = new Intent(this, EndActivity.class);
+        intent.putExtra(GameActivity.ARGS_IP, this.server);
         startActivity(intent);
     }
 
