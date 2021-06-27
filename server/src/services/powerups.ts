@@ -9,32 +9,32 @@ export default class PowerupService {
         return [
             {
                 cost: this.calculateCost(10, 1, player),
-                resource: "",
+                resource: "bronze_dagger",
                 powerup: { id: 1, name: "Bronze dagger", pointsPerClick: 1 }
             },
             {
                 cost: this.calculateCost(2_00, 2, player),
-                resource: "",
+                resource: "steel_dagger",
                 powerup: { id: 2, name: "Steel dagger", pointsPerClick: 10 }
             },
             {
                 cost: this.calculateCost(1_000, 3, player),
-                resource: "",
+                resource: "mithril_dagger",
                 powerup: { id: 3, name: "Mithril dagger", pointsPerClick: 20 }
             },
             {
                 cost: this.calculateCost(5_000, 4, player),
-                resource: "",
+                resource: "adamant_dagger",
                 powerup: { id: 5, name: "Adamant dagger", pointsPerClick: 50 }
             },
             {
                 cost: this.calculateCost(15_000, 5, player),
-                resource: "",
+                resource: "rune_dagger",
                 powerup: { id: 5, name: "Rune dagger", pointsPerClick:  75 }
             },
             {
                 cost: this.calculateCost(50_000, 6, player),
-                resource: "",
+                resource: "dragon_dagger",
                 powerup: { id: 5, name: "Dragon dagger", pointsPerClick: 100 }
             }
         ];

@@ -4,4 +4,8 @@
         <item name="android:backgroundTint">@color/color_states_materialbutton</item>
         <item name="android:textColor">@color/color_states_materialbutton_text</item>
     </style>
+
+    <style name="AppProgressBar" parent="Widget.AppCompat.ProgressBar.Horizontal">
+        <item name="colorAccent">@color/dark_brown</item>
+    </style>
 </resources>

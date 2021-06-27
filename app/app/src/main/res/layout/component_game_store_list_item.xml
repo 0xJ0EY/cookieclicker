@@ -9,27 +9,56 @@
         android:id="@+id/powerup_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
         android:text="Name"
-        />
+        app:layout_constraintStart_toEndOf="@+id/powerup_image"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
         android:id="@+id/powerup_cost"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
-        android:text="Cost"
-        app:layout_constraintStart_toStartOf="parent"
+        android:layout_marginBottom="8dp"
+        android:text="0 Cookies"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/powerup_image"
         app:layout_constraintTop_toBottomOf="@id/powerup_name" />
+
+    <TextView
+        android:id="@+id/powerup_amount"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="8dp"
+        android:text="0"
+        android:textSize="20sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/purchase_powerup"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <Button
         android:id="@+id/purchase_powerup"
+        style="@style/AppMaterialButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginBottom="8dp"
         android:text="Buy"
-        style="@style/AppMaterialButton"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+
+    <ImageView
+        android:id="@+id/powerup_image"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/dragon_dagger" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

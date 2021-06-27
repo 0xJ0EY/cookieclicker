@@ -20,7 +20,7 @@ export default class GameState implements State {
 
     constructor(server: Server) {
         this.messageHandlers = this.setupMessageHandlers();
-        this.serverTime = { timeLeft: 10, startTime: 240 } as ServerTime;
+        this.serverTime = { timeLeft: 30, startTime: 240 } as ServerTime;
         this.server = server;
         this.powerupService = new PowerupService();
 

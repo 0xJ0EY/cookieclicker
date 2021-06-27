@@ -5,6 +5,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -13,9 +14,11 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.joeyderuiter.cookieclicker.GameActivity;
 import com.joeyderuiter.cookieclicker.R;
+import com.joeyderuiter.cookieclicker.models.game.Powerup;
 import com.joeyderuiter.cookieclicker.models.game.ShopPowerup;
 import com.joeyderuiter.cookieclicker.models.messages.PurchasePowerup;
 import com.joeyderuiter.cookieclicker.models.user.Player;
+import com.joeyderuiter.cookieclicker.models.user.PlayerPowerup;
 import com.joeyderuiter.cookieclicker.services.AuthService;
 import com.joeyderuiter.cookieclicker.services.StoreService;
 import com.joeyderuiter.cookieclicker.viewmodels.GameViewModel;
@@ -36,6 +39,8 @@ public class PowerupStoreListAdapter extends RecyclerView.Adapter<PowerupStoreLi
     private final AuthService authService;
 
     private int amountOfCookies = 0;
+
+    private Player player;
 
     private final GameViewModel gameViewModel;
 
@@ -71,6 +76,8 @@ public class PowerupStoreListAdapter extends RecyclerView.Adapter<PowerupStoreLi
             for (Player player : players.getPlayers()) {
                 if (!authService.isCurrentPlayer(player)) continue;
 
+                this.player = player;
+
                 if (this.amountOfCookies != player.getCookies()) {
                     notifyDataSetChanged();
 
@@ -99,14 +106,49 @@ public class PowerupStoreListAdapter extends RecyclerView.Adapter<PowerupStoreLi
 
         holder.getPowerupName().setText(powerup.getPowerup().getName());
 
-        int cost = powerup.getCost();
-        holder.getPowerupCost().setText(Integer.toString(cost));
+        String cost = powerup.getCost() + " cookies";
+        holder.getPowerupCost().setText(cost);
+
+        String amount = String.valueOf(this.getAmountOfPowerup(powerup.getPowerup()));
+        holder.getPowerupAmount().setText(amount);
 
         holder.getPurchasePowerup().setOnClickListener(event -> {
             gameActivity.sendWsMessage(new PurchasePowerup(powerup.getPowerup()));
 
             this.updateStoreInventory();
         });
+
+        holder.getPowerupImage().setImageResource(nameToResourceId(powerup.getResource()));
+    }
+
+    private int nameToResourceId(String name) {
+        switch (name) {
+            case "bronze_dagger":
+                return R.drawable.bronze_dagger;
+            case "steel_dagger":
+                return R.drawable.steel_dagger;
+            case "mithril_dagger":
+                return R.drawable.mithril_dagger;
+            case "adamant_dagger":
+                return R.drawable.adamant_dagger;
+            case "rune_dagger":
+                return R.drawable.rune_dagger;
+            case "dragon_dagger":
+                return R.drawable.dragon_dagger;
+            default:
+                return R.drawable.bronze_dagger;
+        }
+    }
+
+    private int getAmountOfPowerup(Powerup powerup) {
+        if (player == null) return 0;
+
+        for (PlayerPowerup playerPowerup : player.getPowerups()) {
+            if (playerPowerup.getPowerup().getId() == powerup.getId())
+                return playerPowerup.getAmount();
+        }
+
+        return 0;
     }
 
     @Override
@@ -117,19 +159,27 @@ public class PowerupStoreListAdapter extends RecyclerView.Adapter<PowerupStoreLi
     public static class ViewHolder extends RecyclerView.ViewHolder {
 
         @Getter
-        private TextView powerupName;
+        private final TextView powerupName;
 
         @Getter
-        private TextView powerupCost;
+        private final TextView powerupCost;
 
         @Getter
-        private Button purchasePowerup;
+        private final TextView powerupAmount;
+
+        @Getter
+        private final Button purchasePowerup;
+
+        @Getter
+        private final ImageView powerupImage;
 
         public ViewHolder(View itemView) {
             super(itemView);
 
             powerupName = (TextView) itemView.findViewById(R.id.powerup_name);
             powerupCost = (TextView) itemView.findViewById(R.id.powerup_cost);
+            powerupAmount = (TextView) itemView.findViewById(R.id.powerup_amount);
+            powerupImage = (ImageView) itemView.findViewById(R.id.powerup_image);
             purchasePowerup = (Button) itemView.findViewById(R.id.purchase_powerup);
         }
     }
