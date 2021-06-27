@@ -53,7 +53,7 @@
 
     <ImageView
         android:id="@+id/powerup_image"
-        android:layout_width="wrap_content"
+        android:layout_width="32dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
         app:layout_constraintBottom_toBottomOf="parent"
