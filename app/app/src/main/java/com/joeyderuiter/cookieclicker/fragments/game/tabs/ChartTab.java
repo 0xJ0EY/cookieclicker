@@ -77,7 +77,6 @@ public class ChartTab extends CloneableFragment {
         chart.setData(data);
         chart.invalidate();
 
-        // It is not possible to move this to its own function, as this makes the chart crash?
         this.gameViewModel.getPlayerScore().observe(requireActivity(), container -> {
             if (container.getPlayerScores().size() <= 0) return;
 

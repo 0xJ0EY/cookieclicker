@@ -121,12 +121,12 @@ public class GameActivity extends AppCompatActivity {
 
                 @Override
                 public void onClose(int code, String reason, boolean remote) {
-                    // TODO: Go back to the main screen
+                    showLobbyActivity();
                 }
 
                 @Override
                 public void onError(Exception ex) {
-
+                    showLobbyActivity();
                 }
             };
         } catch (URISyntaxException ex) {
@@ -160,6 +160,11 @@ public class GameActivity extends AppCompatActivity {
         transaction.addToBackStack(null);
 
         transaction.commit();
+    }
+
+    private void showLobbyActivity() {
+        Intent intent = new Intent(this, LobbyActivity.class);
+        startActivity(intent);
     }
 
     private void showEndActivity() {
