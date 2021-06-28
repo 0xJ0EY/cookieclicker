@@ -29,8 +29,11 @@ public class LobbyListAdapter extends RecyclerView.Adapter<LobbyListAdapter.View
     private final ArrayList<Server> serverList;
     private final LobbyActivity lobbyActivity;
 
-    public LobbyListAdapter(LobbyActivity lobbyActivity, LobbyService lobbyService) {
+    private final TextView emptySeverMessage;
+
+    public LobbyListAdapter(LobbyActivity lobbyActivity, LobbyService lobbyService, TextView emptySeverMessage) {
         this.lobbyActivity = lobbyActivity;
+        this.emptySeverMessage = emptySeverMessage;
         this.serverList = new ArrayList<>();
 
         lobbyService.getLobbyList().addValueEventListener(new ValueEventListener() {
@@ -45,6 +48,10 @@ public class LobbyListAdapter extends RecyclerView.Adapter<LobbyListAdapter.View
                 }
 
                 notifyDataSetChanged();
+
+                System.out.println("serverList = " + serverList.size());
+
+                emptySeverMessage.setVisibility(serverList.size() > 0 ? View.GONE : View.VISIBLE);
             }
 
             @Override

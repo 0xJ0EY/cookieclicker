@@ -6,6 +6,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.widget.TextView;
 
 import com.joeyderuiter.cookieclicker.adapters.LobbyListAdapter;
 import com.joeyderuiter.cookieclicker.models.lobby.Server;
@@ -30,8 +31,10 @@ public class LobbyActivity extends AppCompatActivity {
     }
 
     private void setupLobbyListView() {
+        TextView emptySeverMessage = (TextView) findViewById(R.id.empty_server_message);
+
         RecyclerView lobbyListView = (RecyclerView) findViewById(R.id.score_list);
-        LobbyListAdapter adapter = new LobbyListAdapter(this, this.lobbyService);
+        LobbyListAdapter adapter = new LobbyListAdapter(this, this.lobbyService, emptySeverMessage);
 
         lobbyListView.setAdapter(adapter);
         lobbyListView.setLayoutManager(new LinearLayoutManager(this));
