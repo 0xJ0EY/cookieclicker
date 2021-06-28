@@ -49,8 +49,6 @@ public class LobbyListAdapter extends RecyclerView.Adapter<LobbyListAdapter.View
 
                 notifyDataSetChanged();
 
-                System.out.println("serverList = " + serverList.size());
-
                 emptySeverMessage.setVisibility(serverList.size() > 0 ? View.GONE : View.VISIBLE);
             }
 

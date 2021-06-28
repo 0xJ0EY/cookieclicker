@@ -107,8 +107,6 @@ public class GameActivity extends AppCompatActivity {
         String userId = authService.getCurrentUserId();
         String uri = String.format("ws://%s/?id=%s", address,  userId);
 
-        System.out.println("uri = " + uri);
-
         try {
             this.webSocket = new WebSocketClient(new URI(uri)) {
                 @Override
@@ -132,7 +130,6 @@ public class GameActivity extends AppCompatActivity {
                 }
             };
         } catch (URISyntaxException ex) {
-            System.out.println("ex = " + ex);
             Log.e(TAG, "Unable to parse the URI");
         }
 

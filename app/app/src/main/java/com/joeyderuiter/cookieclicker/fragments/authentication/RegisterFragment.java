@@ -106,8 +106,6 @@ public class RegisterFragment extends Fragment {
 
     private void createUserProfile(@NonNull String uid, @NonNull Profile profile) {
 
-        System.out.println("Creating user profile");
-
         Task<Void> test = this.authService.createUserProfile(uid, profile);
 
         test.addOnCompleteListener(result -> {
